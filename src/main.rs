@@ -1,9 +1,18 @@
 use std::io;
+use std::fs;
+use dirs::home_dir;
 
 fn main() {
     println!("Welcome to the Wizard Boy Productions CLI tool!");
     println!("Enjoy the Magic!!!");
     println!("");
+
+    // Make the wbp-data folder if it doesn't already exist
+    let wbp_data_path = home_dir().unwrap().join("Documents").join("wbp-data");
+    if !wbp_data_path.exists() {
+        fs::create_dir(&wbp_data_path).expect("Unable to create needed data directory");
+    }
+
     println!("Select an app (planit)");
 
     let mut app = String::new();
@@ -19,7 +28,11 @@ fn main() {
 
         if view.trim() == "Week" {
             // Attempt to pull the text file that has this weeks notes
-            
+            let file_path = "~/Documents/wbp-data/test.txt";
+            let contents = fs::read_to_string(file_path).expect("Should have been able to read the file");
+
+            println!("{:?}", contents.lines());
+
             // Display the week's notes
             println!("Week View");
             println!("Monday");
