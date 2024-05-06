@@ -15,7 +15,8 @@ fn main() {
         fs::create_dir(&wbp_data_path).expect("Unable to create needed data directory");
     }
 
-    println!("Select an app (planit)");
+    print!("Enter an app (planit): ");
+    io::stdout().flush().expect("Darn toilet got stuck again");
 
     let mut app = String::new();
 
@@ -31,12 +32,13 @@ fn main() {
 
         // TODO -> Maybe add a step to create a year directory
 
-        println!("Which view do you want to take? (Week, Month, Year)");
+        print!("Which view do you want to take? (Week, Month, Year): ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
 
         let mut view = String::new();
         io::stdin().read_line(&mut view).expect("Unable to read view");
 
-        if view.trim() == "Week" {
+        if view.trim().to_lowercase() == "week" {
             // Attempt to pull the text file that has this weeks notes
             let week_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join("test.txt");
             if !week_file_path.exists() {
@@ -50,6 +52,7 @@ fn main() {
             }
 
             // Display the week's notes
+            println!("");
             println!("Week View");
             println!("Monday");
             println!("--------------");
@@ -67,13 +70,16 @@ fn main() {
             println!("--------------");
 
             println!("");
-            println!("");
 
-            println!("What would you like to do?");
+            println!("Actions you can take.");
             println!("[1]: Edit a current note.");
             println!("[2]: Add new note.");
             println!("[3]: Next week.");
             println!("[4]: Previous week.");
+            println!("");
+
+            print!("Which action do you want to take: ");
+            io::stdout().flush().expect("Darn toilet got stuck again");
 
             let mut action = String::new();
             io::stdin().read_line(&mut action).expect("Unable to read action");
@@ -81,17 +87,23 @@ fn main() {
             if action.trim() == "1" {
                 // Edit a current note.
             } else if action.trim() == "2" {
-                // Actually just have them put in the day of the week and associate that with 
-                // The right date
-                println!("Enter the day of the week to add it to");
+                println!("");
+                println!("A new note it is good sir or madam!");
+                println!("Fill out the following information and it will be done!");
+                println!("");
+
+                print!("Day of the week: ");
+                io::stdout().flush().expect("Darn toilet got stuck again");
                 let mut day_of_week = String::new();
                 io::stdin().read_line(&mut day_of_week).expect("Unable to read date");
 
-                println!("Enter the type of note (task/event/note)");
+                print!("Type of note (Task/Event/Note): ");
+                io::stdout().flush().expect("Darn toilet got stuck again");
                 let mut note_type = String::new();
                 io::stdin().read_line(&mut note_type).expect("Unable to read note type");
 
-                println!("Enter your note");
+                print!("Enter your note: ");
+                io::stdout().flush().expect("Darn toilet got stuck again");
                 let mut note = String::new();
                 io::stdin().read_line(&mut note).expect("Unable to read note");
 
@@ -121,7 +133,9 @@ fn main() {
                     .write(new_note.as_bytes())
                     .expect("write failed");
 
-                println!("Appended content to a file");
+                println!("\n");
+                println!("Your note has been added! Time to party!");
+                println!("\n");
             } else if action.trim() == "3" {
                 // Move forward to the next week
             } else if action.trim() == "4" {
