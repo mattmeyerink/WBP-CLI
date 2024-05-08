@@ -1,8 +1,22 @@
 use std::io;
 use std::fs;
+use chrono::Duration;
+use chrono::Weekday;
 use dirs::home_dir;
 use std::fs::OpenOptions;
 use std::io::Write;
+use chrono::Datelike;
+use std::collections::HashMap;
+
+struct WeekNote {
+    note_id: String,
+    date: String,
+    day_of_week: String,
+    note_type: String,
+    is_complete: String,
+    note: String,
+    modified_date_time: String
+}
 
 fn main() {
     println!("Welcome to the Wizard Boy Productions CLI tool!");
@@ -44,22 +58,58 @@ fn main() {
             io::stdin().read_line(&mut view).expect("Unable to read view");
 
             if view.trim().to_lowercase() == "week" {
+                let mut current_date = chrono::Local::now();
+                loop {
+                    if current_date.weekday() != Weekday::Mon {
+                        current_date = current_date - Duration::days(1);
+                        break;
+                    }   
+                }
+
+                let current_week_monday_date_string = format!("{}-{}-{}-WeekNotes.txt", current_date.month(), current_date.day(), current_date.year());
+
                 // Attempt to pull the text file that has this weeks notes
-                let week_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join("test.txt");
+                let week_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_week_monday_date_string);
                 if !week_file_path.exists() {
-                    // TODO -> Create the file once I can look up how to do that
+                    std::fs::File::create_new(&week_file_path).expect("There was an error making the needed file");
                 }
         
                 let contents = fs::read_to_string(week_file_path).expect("Should have been able to read the file");
 
+                let mut week_notes: HashMap<String, Vec<WeekNote>>  = HashMap::from([
+                    (String::from("0"), Vec::new()),
+                    (String::from("1"), Vec::new()),
+                    (String::from("2"), Vec::new()),
+                    (String::from("3"), Vec::new()),
+                    (String::from("4"), Vec::new()),
+                    (String::from("5"), Vec::new()),
+                    (String::from("6"), Vec::new())
+                ]);
+
                 for line in contents.lines() {
                     println!("{}", line);
+                    let week_note_array: Vec<&str> = line.split("-").collect();
+                    
+                    let week_note = WeekNote {
+                        note_id: String::from(week_note_array[0]),
+                        date: String::from(week_note_array[1]),
+                        day_of_week: String::from(week_note_array[2]),
+                        note_type: String::from(week_note_array[3]),
+                        is_complete: String::from(week_note_array[4]),
+                        note: String::from(week_note_array[5]),
+                        modified_date_time: String::from(week_note_array[6])
+                    };
+
+                    week_notes.get_mut(&String::from(week_note_array[2])).unwrap().push(week_note);
                 }
 
                 // Display the week's notes
                 println!("");
                 println!("Week View");
                 println!("Monday");
+                for week_note in week_notes.get(&String::from("0")).unwrap() {
+                    println!("{}", week_note.note_id);
+                }
                 println!("--------------");
                 println!("Tuesday");
                 println!("--------------");
@@ -81,6 +131,7 @@ fn main() {
                 println!("[2]: Add new note.");
                 println!("[3]: Next week.");
                 println!("[4]: Previous week.");
+
                 println!("");
 
                 print!("Which action do you want to take: ");
@@ -127,7 +178,8 @@ fn main() {
 
                     let new_note = format!("{}-{}-{}-{}-{}-{}-{}\n", note_id, date, day_of_week.trim(), note_type.trim(), is_complete, note.trim(), modified_date_time);
 
-                    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join("test.txt");
+                    let file_name = format!("{}-{}-{}-WeekNotes.txt", current_date.month(), current_date.day(), current_date.year());
+                    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(file_name);
 
                     // Add a new note
                     let mut data_file = OpenOptions::new()
