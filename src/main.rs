@@ -60,10 +60,11 @@ fn main() {
             if view.trim().to_lowercase() == "week" {
                 let mut current_date = chrono::Local::now();
                 loop {
-                    if current_date.weekday() != Weekday::Mon {
-                        current_date = current_date - Duration::days(1);
+                    if current_date.weekday() == Weekday::Mon {
                         break;
-                    }   
+                    } else {
+                        current_date = current_date - Duration::days(1);
+                    }
                 }
 
                 let current_week_monday_date_string = format!("{}-{}-{}-WeekNotes.txt", current_date.month(), current_date.day(), current_date.year());
@@ -89,6 +90,10 @@ fn main() {
                 for line in contents.lines() {
                     println!("{}", line);
                     let week_note_array: Vec<&str> = line.split("-").collect();
+
+                    if week_note_array.len() < 7 {
+                        continue;
+                    }
                     
                     let week_note = WeekNote {
                         note_id: String::from(week_note_array[0]),
@@ -108,7 +113,7 @@ fn main() {
                 println!("Week View");
                 println!("Monday");
                 for week_note in week_notes.get(&String::from("0")).unwrap() {
-                    println!("{}", week_note.note_id);
+                    println!("{} {} {}", week_note.note_type, week_note.note_id, week_note.note);
                 }
                 println!("--------------");
                 println!("Tuesday");
