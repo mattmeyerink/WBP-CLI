@@ -155,10 +155,30 @@ fn main() {
                     println!("Fill out the following information and it will be done!");
                     println!("");
 
-                    print!("Day of the week: ");
-                    io::stdout().flush().expect("Darn toilet got stuck again");
                     let mut day_of_week = String::new();
-                    io::stdin().read_line(&mut day_of_week).expect("Unable to read date");
+                    let day_of_week_to_weekday: HashMap<String, String> = HashMap::from([
+                        (String::from("monday"), String::from("0")),
+                        (String::from("tuesday"), String::from("0")),
+                        (String::from("wednesday"), String::from("0")),
+                        (String::from("thursday"), String::from("0")),
+                        (String::from("friday"), String::from("0")),
+                        (String::from("saturday"), String::from("0")),
+                        (String::from("sunday"), String::from("0"))
+                    ]);
+                    loop {
+                        let mut day_of_week_string = String::new();
+                        print!("Day of the week: ");
+                        io::stdout().flush().expect("Darn toilet got stuck again");
+                        io::stdin().read_line(&mut day_of_week_string).expect("Unable to read date");
+
+                        if day_of_week_to_weekday.contains_key(day_of_week_string.trim()) {
+                            day_of_week = day_of_week_to_weekday.get(day_of_week_string.trim()).unwrap().to_string();
+                            break;
+                        } else {
+                            println!("Not a valid day of the week. Try again dude!")
+                        }
+                    }
+                    
 
                     print!("Type of note (Task/Event/Note): ");
                     io::stdout().flush().expect("Darn toilet got stuck again");
@@ -181,7 +201,7 @@ fn main() {
 
                     let is_complete = "false";
 
-                    let new_note = format!("{}-{}-{}-{}-{}-{}-{}\n", note_id, date, day_of_week.trim(), note_type.trim(), is_complete, note.trim(), modified_date_time);
+                    let new_note = format!("{}-{}-{}-{}-{}-{}-{}\n", note_id, date, day_of_week, note_type.trim(), is_complete, note.trim(), modified_date_time);
 
                     let file_name = format!("{}-{}-{}-WeekNotes.txt", current_date.month(), current_date.day(), current_date.year());
                     let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(file_name);
@@ -221,6 +241,8 @@ fn main() {
                 println!("\n");
                 println!("This bad boy isn't implemented quite yet. Gonna need to try again");
                 println!("\n");
+            } else if view.trim() == "quit" {
+                break;
             } else {
                 println!("\n");
                 println!("That is not a supported view");
