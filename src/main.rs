@@ -89,7 +89,6 @@ fn main() {
                 ]);
 
                 for line in contents.lines() {
-                    println!("{}", line);
                     let week_note_array: Vec<&str> = line.split("--").collect();
 
                     if week_note_array.len() < 7 {
@@ -115,37 +114,107 @@ fn main() {
                 println!("Monday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("0")).unwrap() {
-                    println!("{} {} ({})", week_note.note_type, week_note.note, week_note.note_id);
+                    let note_symbol;
+                    if week_note.note_type == "task" && week_note.is_complete == "true" {
+                        note_symbol = "x";
+                    } else if week_note.note_type == "task" && week_note.is_complete == "false" {
+                        note_symbol = "o";
+                    } else if week_note.note_type == "event" {
+                        note_symbol = "*";
+                    } else {
+                        note_symbol = "-";
+                    }
+                    println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
                 println!("Tuesday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("1")).unwrap() {
-                    println!("{} {} ({})", week_note.note_type, week_note.note, week_note.note_id);
+                    let note_symbol;
+                    if week_note.note_type == "task" && week_note.is_complete == "true" {
+                        note_symbol = "x";
+                    } else if week_note.note_type == "task" && week_note.is_complete == "false" {
+                        note_symbol = "o";
+                    } else if week_note.note_type == "event" {
+                        note_symbol = "*";
+                    } else {
+                        note_symbol = "-";
+                    }
+                    println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
                 println!("Wednesday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("2")).unwrap() {
-                    println!("{} {} ({})", week_note.note_type, week_note.note, week_note.note_id);
+                    let note_symbol;
+                    if week_note.note_type == "task" && week_note.is_complete == "true" {
+                        note_symbol = "x";
+                    } else if week_note.note_type == "task" && week_note.is_complete == "false" {
+                        note_symbol = "o";
+                    } else if week_note.note_type == "event" {
+                        note_symbol = "*";
+                    } else {
+                        note_symbol = "-";
+                    }
+                    println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
                 println!("Thursday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("3")).unwrap() {
-                    println!("{} {} ({})", week_note.note_type, week_note.note, week_note.note_id);
+                    let note_symbol;
+                    if week_note.note_type == "task" && week_note.is_complete == "true" {
+                        note_symbol = "x";
+                    } else if week_note.note_type == "task" && week_note.is_complete == "false" {
+                        note_symbol = "o";
+                    } else if week_note.note_type == "event" {
+                        note_symbol = "*";
+                    } else {
+                        note_symbol = "-";
+                    }
+                    println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
                 println!("Friday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("4")).unwrap() {
-                    println!("{} {} ({})", week_note.note_type, week_note.note, week_note.note_id);
+                    let note_symbol;
+                    if week_note.note_type == "task" && week_note.is_complete == "true" {
+                        note_symbol = "x";
+                    } else if week_note.note_type == "task" && week_note.is_complete == "false" {
+                        note_symbol = "o";
+                    } else if week_note.note_type == "event" {
+                        note_symbol = "*";
+                    } else {
+                        note_symbol = "-";
+                    }
+                    println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
                 println!("Saturday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("5")).unwrap() {
-                    println!("{} {} ({})", week_note.note_type, week_note.note, week_note.note_id);
+                    let note_symbol;
+                    if week_note.note_type == "task" && week_note.is_complete == "true" {
+                        note_symbol = "x";
+                    } else if week_note.note_type == "task" && week_note.is_complete == "false" {
+                        note_symbol = "o";
+                    } else if week_note.note_type == "event" {
+                        note_symbol = "*";
+                    } else {
+                        note_symbol = "-";
+                    }
+                    println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
                 println!("Sunday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("6")).unwrap() {
-                    println!("{} {} {}", week_note.note_type, week_note.note, week_note.note_id);
+                    let note_symbol;
+                    if week_note.note_type == "task" && week_note.is_complete == "true" {
+                        note_symbol = "x";
+                    } else if week_note.note_type == "task" && week_note.is_complete == "false" {
+                        note_symbol = "o";
+                    } else if week_note.note_type == "event" {
+                        note_symbol = "*";
+                    } else {
+                        note_symbol = "-";
+                    }
+                    println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
 
                 println!("");
@@ -242,7 +311,7 @@ fn main() {
                     let date = format!("{}-{}-{}", note_date_object.month(), note_date_object.day(), note_date_object.year());
 
                     // TODO -> This needs to be calculated
-                    let modified_date_time = "SomeDateTimeNumbers";
+                    let modified_date_time = chrono::Local::now().timestamp().to_string();
 
                     let is_complete = "false";
 
