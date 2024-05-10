@@ -7,6 +7,7 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use chrono::Datelike;
 use std::collections::HashMap;
+use uuid::Uuid;
 
 struct WeekNote {
     note_id: String,
@@ -89,7 +90,7 @@ fn main() {
 
                 for line in contents.lines() {
                     println!("{}", line);
-                    let week_note_array: Vec<&str> = line.split("-").collect();
+                    let week_note_array: Vec<&str> = line.split("--").collect();
 
                     if week_note_array.len() < 7 {
                         continue;
@@ -112,22 +113,40 @@ fn main() {
                 println!("");
                 println!("Week View");
                 println!("Monday");
-                for week_note in week_notes.get(&String::from("0")).unwrap() {
-                    println!("{} {} {}", week_note.note_type, week_note.note_id, week_note.note);
-                }
                 println!("--------------");
+                for week_note in week_notes.get(&String::from("0")).unwrap() {
+                    println!("{} {} ({})", week_note.note_type, week_note.note, week_note.note_id);
+                }
                 println!("Tuesday");
                 println!("--------------");
+                for week_note in week_notes.get(&String::from("1")).unwrap() {
+                    println!("{} {} ({})", week_note.note_type, week_note.note, week_note.note_id);
+                }
                 println!("Wednesday");
                 println!("--------------");
+                for week_note in week_notes.get(&String::from("2")).unwrap() {
+                    println!("{} {} ({})", week_note.note_type, week_note.note, week_note.note_id);
+                }
                 println!("Thursday");
                 println!("--------------");
+                for week_note in week_notes.get(&String::from("3")).unwrap() {
+                    println!("{} {} ({})", week_note.note_type, week_note.note, week_note.note_id);
+                }
                 println!("Friday");
                 println!("--------------");
+                for week_note in week_notes.get(&String::from("4")).unwrap() {
+                    println!("{} {} ({})", week_note.note_type, week_note.note, week_note.note_id);
+                }
                 println!("Saturday");
                 println!("--------------");
+                for week_note in week_notes.get(&String::from("5")).unwrap() {
+                    println!("{} {} ({})", week_note.note_type, week_note.note, week_note.note_id);
+                }
                 println!("Sunday");
                 println!("--------------");
+                for week_note in week_notes.get(&String::from("6")).unwrap() {
+                    println!("{} {} {}", week_note.note_type, week_note.note, week_note.note_id);
+                }
 
                 println!("");
 
@@ -155,15 +174,15 @@ fn main() {
                     println!("Fill out the following information and it will be done!");
                     println!("");
 
-                    let mut day_of_week = String::new();
+                    let day_of_week;
                     let day_of_week_to_weekday: HashMap<String, String> = HashMap::from([
                         (String::from("monday"), String::from("0")),
-                        (String::from("tuesday"), String::from("0")),
-                        (String::from("wednesday"), String::from("0")),
-                        (String::from("thursday"), String::from("0")),
-                        (String::from("friday"), String::from("0")),
-                        (String::from("saturday"), String::from("0")),
-                        (String::from("sunday"), String::from("0"))
+                        (String::from("tuesday"), String::from("1")),
+                        (String::from("wednesday"), String::from("2")),
+                        (String::from("thursday"), String::from("3")),
+                        (String::from("friday"), String::from("4")),
+                        (String::from("saturday"), String::from("5")),
+                        (String::from("sunday"), String::from("6"))
                     ]);
                     loop {
                         let mut day_of_week_string = String::new();
@@ -179,29 +198,55 @@ fn main() {
                         }
                     }
                     
+                    let valid_note_types = vec![String::from("task"), String::from("event"), String::from("note")];
+                    let note_type;
+                    loop {
+                        print!("Type of note (Task/Event/Note): ");
+                        io::stdout().flush().expect("Darn toilet got stuck again");
+                        let mut note_type_raw = String::new();
+                        io::stdin().read_line(&mut note_type_raw).expect("Unable to read note type");
 
-                    print!("Type of note (Task/Event/Note): ");
-                    io::stdout().flush().expect("Darn toilet got stuck again");
-                    let mut note_type = String::new();
-                    io::stdin().read_line(&mut note_type).expect("Unable to read note type");
+                        let note_type_formatted = note_type_raw.trim().to_lowercase();
+                        if valid_note_types.contains(&note_type_formatted) {
+                            note_type = note_type_formatted;
+                            break;
+                        } else {
+                            println!("Not a valid type dudeeee. How bout we try that again.");
+                        }
+                    }
+                    
+                    let note;
+                    loop {
+                        print!("Enter your note: ");
+                        io::stdout().flush().expect("Darn toilet got stuck again");
+                        let mut note_raw = String::new();
+                        io::stdin().read_line(&mut note_raw).expect("Unable to read note");
 
-                    print!("Enter your note: ");
-                    io::stdout().flush().expect("Darn toilet got stuck again");
-                    let mut note = String::new();
-                    io::stdin().read_line(&mut note).expect("Unable to read note");
-
+                        let note_raw_format = String::from(note_raw.trim());
+                        if note_raw_format.len() > 0 {
+                            note = note_raw_format;
+                            break;
+                        } else {
+                            println!("It's going to be real confusing for future you if you make a note without text bro.")
+                        }
+                    }
+                    
                     // TODO -> This needs to be a unique id
-                    let note_id = "UNIQUE_ID";
+                    let note_id = String::from(Uuid::new_v4());
 
                     // TODO -> Need to do this so we actully know which date it is
-                    let date = "SomeDate";
+
+                    // Need to grab the date object for the day of the week the user is using 
+                    // To add to the note
+                    let note_date_object = current_date + Duration::days(day_of_week.parse::<i64>().unwrap());
+                    let date = format!("{}-{}-{}", note_date_object.month(), note_date_object.day(), note_date_object.year());
 
                     // TODO -> This needs to be calculated
                     let modified_date_time = "SomeDateTimeNumbers";
 
                     let is_complete = "false";
 
-                    let new_note = format!("{}-{}-{}-{}-{}-{}-{}\n", note_id, date, day_of_week, note_type.trim(), is_complete, note.trim(), modified_date_time);
+                    let new_note = format!("{}--{}--{}--{}--{}--{}--{}\n", note_id, date, day_of_week, note_type, is_complete, note, modified_date_time);
 
                     let file_name = format!("{}-{}-{}-WeekNotes.txt", current_date.month(), current_date.day(), current_date.year());
                     let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(file_name);
