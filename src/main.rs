@@ -111,6 +111,7 @@ fn main() {
                 // Display the week's notes
                 println!("");
                 println!("Week View");
+                println!("");
                 println!("Monday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("0")).unwrap() {
@@ -126,6 +127,8 @@ fn main() {
                     }
                     println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
+                println!("");
+                
                 println!("Tuesday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("1")).unwrap() {
@@ -141,6 +144,8 @@ fn main() {
                     }
                     println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
+                println!("");
+
                 println!("Wednesday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("2")).unwrap() {
@@ -156,6 +161,8 @@ fn main() {
                     }
                     println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
+                println!("");
+
                 println!("Thursday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("3")).unwrap() {
@@ -171,6 +178,8 @@ fn main() {
                     }
                     println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
+                println!("");
+
                 println!("Friday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("4")).unwrap() {
@@ -186,6 +195,8 @@ fn main() {
                     }
                     println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
+                println!("");
+
                 println!("Saturday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("5")).unwrap() {
@@ -201,6 +212,8 @@ fn main() {
                     }
                     println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
                 }
+                println!("");
+
                 println!("Sunday");
                 println!("--------------");
                 for week_note in week_notes.get(&String::from("6")).unwrap() {
