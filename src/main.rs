@@ -40,6 +40,106 @@ fn display_days_notes(week_notes: &Vec<WeekNote>, section_title: String) {
     println!("");
 }
 
+fn get_current_week_monday() -> DateTime<Local> {
+    let mut current_date = chrono::Local::now();
+    loop {
+        if current_date.weekday() == Weekday::Mon {
+            break;
+        } else {
+            current_date = current_date - Duration::days(1);
+        }
+    }
+
+    return current_date;
+}
+
+fn get_contents_of_week_notes_file(current_date: DateTime<Local>) -> String {
+    let current_week_monday_date_string = format!("{}-{}-{}-WeekNotes.txt", current_date.month(), current_date.day(), current_date.year());
+
+    // Attempt to pull the text file that has this weeks notes
+    let week_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_week_monday_date_string);
+    if !week_file_path.exists() {
+        std::fs::File::create_new(&week_file_path).expect("There was an error making the needed file");
+    }
+
+    let contents = fs::read_to_string(week_file_path).expect("Should have been able to read the file");
+
+    return contents;
+}
+
+fn fetch_week_notes(current_date: DateTime<Local>) -> HashMap<String, Vec<WeekNote>> {
+    let contents = get_contents_of_week_notes_file(current_date);
+
+    let mut week_notes: HashMap<String, Vec<WeekNote>>  = HashMap::from([
+        (String::from("0"), Vec::new()),
+        (String::from("1"), Vec::new()),
+        (String::from("2"), Vec::new()),
+        (String::from("3"), Vec::new()),
+        (String::from("4"), Vec::new()),
+        (String::from("5"), Vec::new()),
+        (String::from("6"), Vec::new())
+    ]);
+
+    for line in contents.lines() {
+        let week_note_array: Vec<&str> = line.split("--").collect();
+
+        if week_note_array.len() < 7 {
+            continue;
+        }
+        
+        let week_note = WeekNote {
+            note_id: String::from(week_note_array[0]),
+            date: String::from(week_note_array[1]),
+            day_of_week: String::from(week_note_array[2]),
+            note_type: String::from(week_note_array[3]),
+            is_complete: String::from(week_note_array[4]),
+            note: String::from(week_note_array[5]),
+            modified_date_time: String::from(week_note_array[6])
+        };
+
+        week_notes.get_mut(&String::from(week_note_array[2])).unwrap().push(week_note);
+    }
+
+    return week_notes;
+}
+
+fn display_week_notes(week_notes: HashMap<String, Vec<WeekNote>>) {
+    // Display the week's notes
+    println!("");
+    println!("Week View");
+    println!("");
+    
+    display_days_notes(week_notes.get(&String::from("0")).unwrap(), String::from("Monday"));
+
+    display_days_notes(week_notes.get(&String::from("1")).unwrap(), String::from("Tuesday"));
+
+    display_days_notes(week_notes.get(&String::from("2")).unwrap(), String::from("Wednesday"));
+
+    display_days_notes(week_notes.get(&String::from("3")).unwrap(), String::from("Thursday"));
+
+    display_days_notes(week_notes.get(&String::from("4")).unwrap(), String::from("Friday"));
+
+    display_days_notes(week_notes.get(&String::from("5")).unwrap(), String::from("Saturday"));
+
+    display_days_notes(week_notes.get(&String::from("6")).unwrap(), String::from("Sunday"));
+}
+
+fn write_to_week_notes_file(current_date: DateTime<Local>, updated_file_contents: String, append: bool) {
+    let file_name = format!("{}-{}-{}-WeekNotes.txt", current_date.month(), current_date.day(), current_date.year());
+    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(file_name);
+
+    // Add a new note
+    let mut data_file = OpenOptions::new()
+        .append(append)
+        .open(file_path)
+        .expect("cannot open file");
+
+    // Write to a file
+    data_file
+        .write(updated_file_contents.as_bytes())
+        .expect("write failed");
+}
+
 fn add_new_week_note(current_date: DateTime<Local>) {
     println!("");
     println!("A new note it is good sir or madam!");
@@ -139,82 +239,65 @@ fn add_new_week_note(current_date: DateTime<Local>) {
     println!("\n");
 }
 
+fn mark_week_note_completed(current_date: DateTime<Local>) {
+    let week_file_contents = get_contents_of_week_notes_file(current_date);
+
+    let week_notes = fetch_week_notes(current_date);
+
+    display_week_notes(week_notes);
+
+    let note_id: String;
+    loop {
+        print!("Enter the note_id (Grab from the print out above): ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        let mut note_id_raw = String::new();
+        io::stdin().read_line(&mut note_id_raw).expect("Unable to read note");
+
+        let note_id_raw_format = String::from(note_id_raw.trim());
+        if note_id_raw_format.len() > 0 {
+            note_id = note_id_raw_format;
+            break;
+        } else {
+            println!("It's going to be real confusing for future you if you make a note without text bro.")
+        }
+    }
+
+    let mut updated_week_file_contents = String::from("");
+    for line in week_file_contents.lines() {
+        if line.contains(&note_id) {
+            // Now we know that this line is the one we want to replace.
+            println!("{:?}", line);
+            let mut updated_line_vector: Vec<&str> = line.split("--").collect();
+            updated_line_vector[4] = "true";
+
+            let updated_line_string = updated_line_vector.join("--");
+
+            updated_week_file_contents = week_file_contents.replace(line, &updated_line_string);
+        }
+    }
+
+    if updated_week_file_contents.len() == 0 {
+        return;
+    }
+
+    write_to_week_notes_file(current_date, updated_week_file_contents, false);
+}
+
 fn week_view() {
     loop {
-        let mut current_date = chrono::Local::now();
-        loop {
-            if current_date.weekday() == Weekday::Mon {
-                break;
-            } else {
-                current_date = current_date - Duration::days(1);
-            }
-        }
+        let current_date = get_current_week_monday();
 
-        let current_week_monday_date_string = format!("{}-{}-{}-WeekNotes.txt", current_date.month(), current_date.day(), current_date.year());
+        let week_notes = fetch_week_notes(current_date);
 
-        // Attempt to pull the text file that has this weeks notes
-        let week_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_week_monday_date_string);
-        if !week_file_path.exists() {
-            std::fs::File::create_new(&week_file_path).expect("There was an error making the needed file");
-        }
-
-        let contents = fs::read_to_string(week_file_path).expect("Should have been able to read the file");
-
-        let mut week_notes: HashMap<String, Vec<WeekNote>>  = HashMap::from([
-            (String::from("0"), Vec::new()),
-            (String::from("1"), Vec::new()),
-            (String::from("2"), Vec::new()),
-            (String::from("3"), Vec::new()),
-            (String::from("4"), Vec::new()),
-            (String::from("5"), Vec::new()),
-            (String::from("6"), Vec::new())
-        ]);
-
-        for line in contents.lines() {
-            let week_note_array: Vec<&str> = line.split("--").collect();
-
-            if week_note_array.len() < 7 {
-                continue;
-            }
-            
-            let week_note = WeekNote {
-                note_id: String::from(week_note_array[0]),
-                date: String::from(week_note_array[1]),
-                day_of_week: String::from(week_note_array[2]),
-                note_type: String::from(week_note_array[3]),
-                is_complete: String::from(week_note_array[4]),
-                note: String::from(week_note_array[5]),
-                modified_date_time: String::from(week_note_array[6])
-            };
-
-            week_notes.get_mut(&String::from(week_note_array[2])).unwrap().push(week_note);
-        }
-
-        // Display the week's notes
-        println!("");
-        println!("Week View");
-        println!("");
-        
-        display_days_notes(week_notes.get(&String::from("0")).unwrap(), String::from("Monday"));
-
-        display_days_notes(week_notes.get(&String::from("1")).unwrap(), String::from("Tuesday"));
-
-        display_days_notes(week_notes.get(&String::from("2")).unwrap(), String::from("Wednesday"));
-
-        display_days_notes(week_notes.get(&String::from("3")).unwrap(), String::from("Thursday"));
-
-        display_days_notes(week_notes.get(&String::from("4")).unwrap(), String::from("Friday"));
-
-        display_days_notes(week_notes.get(&String::from("5")).unwrap(), String::from("Saturday"));
-
-        display_days_notes(week_notes.get(&String::from("6")).unwrap(), String::from("Sunday"));
+        display_week_notes(week_notes);
 
         println!("Actions you can take.");
-        println!("[1]: Edit a current note.");
-        println!("[2]: Add new note.");
-        println!("[3]: Next week.");
-        println!("[4]: Previous week.");
-        println!("[5]: Quit week view");
+        println!("[1]: Add new note.");
+        println!("[2]: Mark a task complete.");
+        println!("[3]: Edit a current note.");
+        println!("[4]: Next week.");
+        println!("[5]: Previous week.");
+        println!("[6]: Quit week view");
 
         println!("");
 
@@ -225,11 +308,9 @@ fn week_view() {
         io::stdin().read_line(&mut action).expect("Unable to read action");
 
         if action.trim() == "1" {
-            println!("\n");
-            println!("This bad boy isn't implemented quite yet. Gonna need to try again");
-            println!("\n");
-        } else if action.trim() == "2" {
             add_new_week_note(current_date);
+        } else if action.trim() == "2" {
+            mark_week_note_completed(current_date);
         } else if action.trim() == "3" {
             println!("\n");
             println!("This bad boy isn't implemented quite yet. Gonna need to try again");
@@ -239,6 +320,10 @@ fn week_view() {
             println!("This bad boy isn't implemented quite yet. Gonna need to try again");
             println!("\n");
         } else if action.trim() == "5" {
+            println!("\n");
+            println!("This bad boy isn't implemented quite yet. Gonna need to try again");
+            println!("\n");
+        } else if action.trim() == "6" {
             break;
         } else {
             println!("\n");
