@@ -124,13 +124,14 @@ fn display_week_notes(week_notes: HashMap<String, Vec<WeekNote>>) {
     display_days_notes(week_notes.get(&String::from("6")).unwrap(), String::from("Sunday"));
 }
 
-fn write_to_week_notes_file(current_date: DateTime<Local>, updated_file_contents: String, append: bool) {
+fn write_to_week_notes_file(current_date: DateTime<Local>, updated_file_contents: String) {
     let file_name = format!("{}-{}-{}-WeekNotes.txt", current_date.month(), current_date.day(), current_date.year());
     let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(file_name);
 
     // Add a new note
     let mut data_file = OpenOptions::new()
-        .append(append)
+        .write(true)
+        .truncate(true)
         .open(file_path)
         .expect("cannot open file");
 
@@ -280,7 +281,7 @@ fn mark_week_note_completed(current_date: DateTime<Local>) {
         return;
     }
 
-    write_to_week_notes_file(current_date, updated_week_file_contents, false);
+    write_to_week_notes_file(current_date, updated_week_file_contents);
 }
 
 fn week_view() {
