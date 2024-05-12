@@ -21,7 +21,7 @@ struct WeekNote {
     modified_date_time: String
 }
 
-fn display_days_notes(week_notes: &Vec<WeekNote>, section_title: String) {
+fn display_days_notes(week_notes: &Vec<WeekNote>, section_title: String, display_id: bool) {
     println!("{}", section_title);
     println!("--------------");
     for week_note in week_notes {
@@ -35,7 +35,12 @@ fn display_days_notes(week_notes: &Vec<WeekNote>, section_title: String) {
         } else {
             note_symbol = "-";
         }
-        println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
+        if display_id {
+            println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
+        } else {
+            println!("{} {}", note_symbol, week_note.note);
+        }
+        
     }
     println!("");
 }
@@ -103,25 +108,25 @@ fn fetch_week_notes(current_date: DateTime<Local>) -> HashMap<String, Vec<WeekNo
     return week_notes;
 }
 
-fn display_week_notes(week_notes: HashMap<String, Vec<WeekNote>>) {
+fn display_week_notes(week_notes: HashMap<String, Vec<WeekNote>>, display_id: bool) {
     // Display the week's notes
     println!("");
     println!("Week View");
     println!("");
     
-    display_days_notes(week_notes.get(&String::from("0")).unwrap(), String::from("Monday"));
+    display_days_notes(week_notes.get(&String::from("0")).unwrap(), String::from("Monday"), display_id);
 
-    display_days_notes(week_notes.get(&String::from("1")).unwrap(), String::from("Tuesday"));
+    display_days_notes(week_notes.get(&String::from("1")).unwrap(), String::from("Tuesday"), display_id);
 
-    display_days_notes(week_notes.get(&String::from("2")).unwrap(), String::from("Wednesday"));
+    display_days_notes(week_notes.get(&String::from("2")).unwrap(), String::from("Wednesday"), display_id);
 
-    display_days_notes(week_notes.get(&String::from("3")).unwrap(), String::from("Thursday"));
+    display_days_notes(week_notes.get(&String::from("3")).unwrap(), String::from("Thursday"), display_id);
 
-    display_days_notes(week_notes.get(&String::from("4")).unwrap(), String::from("Friday"));
+    display_days_notes(week_notes.get(&String::from("4")).unwrap(), String::from("Friday"), display_id);
 
-    display_days_notes(week_notes.get(&String::from("5")).unwrap(), String::from("Saturday"));
+    display_days_notes(week_notes.get(&String::from("5")).unwrap(), String::from("Saturday"), display_id);
 
-    display_days_notes(week_notes.get(&String::from("6")).unwrap(), String::from("Sunday"));
+    display_days_notes(week_notes.get(&String::from("6")).unwrap(), String::from("Sunday"), display_id);
 }
 
 fn write_to_week_notes_file(current_date: DateTime<Local>, updated_file_contents: String) {
@@ -245,7 +250,7 @@ fn mark_week_note_completed(current_date: DateTime<Local>) {
 
     let week_notes = fetch_week_notes(current_date);
 
-    display_week_notes(week_notes);
+    display_week_notes(week_notes, true);
 
     let note_id: String;
     loop {
@@ -290,7 +295,7 @@ fn week_view() {
 
         let week_notes = fetch_week_notes(current_date);
 
-        display_week_notes(week_notes);
+        display_week_notes(week_notes, false);
 
         println!("Actions you can take.");
         println!("[1]: Add new note.");
