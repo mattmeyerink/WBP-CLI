@@ -1,5 +1,6 @@
 use std::io;
 use std::fs;
+use std::thread::current;
 use chrono::DateTime;
 use chrono::Duration;
 use chrono::Local;
@@ -108,10 +109,13 @@ fn fetch_week_notes(current_date: DateTime<Local>) -> HashMap<String, Vec<WeekNo
     return week_notes;
 }
 
-fn display_week_notes(week_notes: HashMap<String, Vec<WeekNote>>, display_id: bool) {
+fn display_week_notes(week_notes: HashMap<String, Vec<WeekNote>>, display_id: bool, current_date: DateTime<Local>) {
     // Display the week's notes
     println!("");
-    println!("Week View");
+    println!("*****************************************************************************");
+    println!("*****************************************************************************");
+    println!("");
+    println!("Week View - Week of {}-{}-{}", current_date.month(), current_date.day(), current_date.year());
     println!("");
     
     display_days_notes(week_notes.get(&String::from("0")).unwrap(), String::from("Monday"), display_id);
@@ -127,6 +131,10 @@ fn display_week_notes(week_notes: HashMap<String, Vec<WeekNote>>, display_id: bo
     display_days_notes(week_notes.get(&String::from("5")).unwrap(), String::from("Saturday"), display_id);
 
     display_days_notes(week_notes.get(&String::from("6")).unwrap(), String::from("Sunday"), display_id);
+
+    println!("*****************************************************************************");
+    println!("*****************************************************************************");
+    println!("");
 }
 
 fn write_to_week_notes_file(current_date: DateTime<Local>, updated_file_contents: String) {
@@ -250,7 +258,7 @@ fn mark_week_note_completed(current_date: DateTime<Local>) {
 
     let week_notes = fetch_week_notes(current_date);
 
-    display_week_notes(week_notes, true);
+    display_week_notes(week_notes, true, current_date);
 
     let note_id: String;
     loop {
@@ -290,12 +298,12 @@ fn mark_week_note_completed(current_date: DateTime<Local>) {
 }
 
 fn week_view() {
-    loop {
-        let current_date = get_current_week_monday();
+    let mut current_date = get_current_week_monday();
 
+    loop {
         let week_notes = fetch_week_notes(current_date);
 
-        display_week_notes(week_notes, false);
+        display_week_notes(week_notes, false, current_date);
 
         println!("Actions you can take.");
         println!("[1]: Add new note.");
@@ -322,13 +330,9 @@ fn week_view() {
             println!("This bad boy isn't implemented quite yet. Gonna need to try again");
             println!("\n");
         } else if action.trim() == "4" {
-            println!("\n");
-            println!("This bad boy isn't implemented quite yet. Gonna need to try again");
-            println!("\n");
+            current_date = current_date + Duration::days(7);
         } else if action.trim() == "5" {
-            println!("\n");
-            println!("This bad boy isn't implemented quite yet. Gonna need to try again");
-            println!("\n");
+            current_date = current_date - Duration::days(7);
         } else if action.trim() == "6" {
             break;
         } else {
