@@ -1,6 +1,5 @@
 use std::io;
 use std::fs;
-use std::thread::current;
 use chrono::DateTime;
 use chrono::Duration;
 use chrono::Local;
@@ -279,8 +278,6 @@ fn mark_week_note_completed(current_date: DateTime<Local>) {
     let mut updated_week_file_contents = String::from("");
     for line in week_file_contents.lines() {
         if line.contains(&note_id) {
-            // Now we know that this line is the one we want to replace.
-            println!("{:?}", line);
             let mut updated_line_vector: Vec<&str> = line.split("--").collect();
             updated_line_vector[4] = "true";
 
@@ -295,6 +292,50 @@ fn mark_week_note_completed(current_date: DateTime<Local>) {
     }
 
     write_to_week_notes_file(current_date, updated_week_file_contents);
+}
+
+fn edit_note(current_date: DateTime<Local>) {
+    let week_file_contents = get_contents_of_week_notes_file(current_date);
+
+    let week_notes = fetch_week_notes(current_date);
+
+    display_week_notes(week_notes, true, current_date);
+
+    let note_id: String;
+    loop {
+        print!("Enter the note_id (Grab from the print out above): ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        let mut note_id_raw = String::new();
+        io::stdin().read_line(&mut note_id_raw).expect("Unable to read note");
+
+        let note_id_raw_format = String::from(note_id_raw.trim());
+        if note_id_raw_format.len() > 0 {
+            note_id = note_id_raw_format;
+            break;
+        } else {
+            println!("It's going to be real confusing for future you if you make a note without text bro.")
+        }
+    }
+
+    let line_day_off_week = String::new();
+    let note_type = String::new();
+    let note = String::new();
+    // Find the line in the week_file_contents
+    for line in week_file_contents.lines() {
+        if line.contains(&note_id) {
+            let mut updated_line_vector: Vec<&str> = line.split("--").collect();
+            
+            // Yank all of the goodies out of this vector and put them in the default holders
+        }
+    }
+
+    // ask the user to re-input everything about the note defaulting to the current values
+
+    // Calculate the updated value of the note
+
+    // Replace the original value of the note in the week_file_contents with the new value
+
+    // Overwrite the original file with the new week file contents
 }
 
 fn week_view() {
