@@ -23,3 +23,7 @@ Each line is a note in the format noteID-date-dayOfTheWeek-noteType-isComplete-n
 Running mileage and and workout tracker that relys on easy to backup text files!
 This allows you to be in control of all of your own data at all times while allowing us to 
 save on server costs and prevent us from needing to build out a UI from scratch.
+
+I think the key here is being able to see granular data over the years. One limitation with strava
+is you can only look back month by month for so long. Having all of the data on your own device
+we can map out monthly/weekly mileage over YEARS if we want to all from the CLI.
