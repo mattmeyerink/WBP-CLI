@@ -36,9 +36,7 @@ pub fn week_view() {
         } else if action.trim() == "2" {
             actions::mark_week_note_completed(current_date);
         } else if action.trim() == "3" {
-            println!("\n");
-            println!("This bad boy isn't implemented quite yet. Gonna need to try again");
-            println!("\n");
+            actions::edit_note(current_date);
         } else if action.trim() == "4" {
             current_date = current_date + Duration::days(7);
         } else if action.trim() == "5" {

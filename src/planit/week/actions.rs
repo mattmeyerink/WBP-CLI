@@ -173,25 +173,84 @@ pub fn edit_note(current_date: DateTime<Local>) {
         }
     }
 
-    let mut line_day_off_week = String::new();
-    let note_type = String::new();
-    let note = String::new();
+    let mut updated_line_vector: Vec<&str> = vec![];
+    let mut original_line = "";
     // Find the line in the week_file_contents
     for line in week_file_contents.lines() {
         if line.contains(&note_id) {
-            let mut updated_line_vector: Vec<&str> = line.split("--").collect();
-            
-            line_day_off_week = String::from(updated_line_vector[2]);
-
-            // Yank all of the goodies out of this vector and put them in the default holders
+            original_line = line;
+            updated_line_vector = line.split("--").collect();
         }
     }
 
-    // ask the user to re-input everything about the note defaulting to the current values
+    let day_of_week;
+    let day_of_week_to_weekday: HashMap<String, String> = HashMap::from([
+        (String::from("monday"), String::from("0")),
+        (String::from("tuesday"), String::from("1")),
+        (String::from("wednesday"), String::from("2")),
+        (String::from("thursday"), String::from("3")),
+        (String::from("friday"), String::from("4")),
+        (String::from("saturday"), String::from("5")),
+        (String::from("sunday"), String::from("6"))
+    ]);
+    loop {
+        let mut day_of_week_string = String::new();
+        print!("Day of the week: ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        io::stdin().read_line(&mut day_of_week_string).expect("Unable to read date");
 
-    // Calculate the updated value of the note
+        if day_of_week_to_weekday.contains_key(day_of_week_string.trim()) {
+            day_of_week = day_of_week_to_weekday.get(day_of_week_string.trim()).unwrap().to_string();
+            break;
+        } else {
+            println!("Not a valid day of the week. Try again dude!")
+        }
+    }
+    
+    let valid_note_types = vec![String::from("task"), String::from("event"), String::from("note")];
+    let note_type;
+    loop {
+        print!("Type of note (Task/Event/Note): ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        let mut note_type_raw = String::new();
+        io::stdin().read_line(&mut note_type_raw).expect("Unable to read note type");
 
-    // Replace the original value of the note in the week_file_contents with the new value
+        let note_type_formatted = note_type_raw.trim().to_lowercase();
+        if valid_note_types.contains(&note_type_formatted) {
+            note_type = note_type_formatted;
+            break;
+        } else {
+            println!("Not a valid type dudeeee. How bout we try that again.");
+        }
+    }
+    
+    let note;
+    loop {
+        print!("Enter your note: ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        let mut note_raw = String::new();
+        io::stdin().read_line(&mut note_raw).expect("Unable to read note");
 
-    // Overwrite the original file with the new week file contents
+        let note_raw_format = String::from(note_raw.trim());
+        if note_raw_format.len() > 0 {
+            note = note_raw_format;
+            break;
+        } else {
+            println!("It's going to be real confusing for future you if you make a note without text bro.")
+        }
+    }
+
+    updated_line_vector[2] = &day_of_week;
+    updated_line_vector[3] = &note_type;
+    updated_line_vector[5] = &note;
+
+    let updated_line_string = updated_line_vector.join("--");
+
+    let updated_week_file_contents = week_file_contents.replace(original_line, &updated_line_string);
+    
+    if updated_week_file_contents.len() == 0 {
+        return;
+    }
+
+    write_to_week_notes_file(current_date, updated_week_file_contents);
 }
