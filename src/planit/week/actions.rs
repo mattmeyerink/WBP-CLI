@@ -82,7 +82,6 @@ pub fn add_new_week_note(current_date: DateTime<Local>) {
     let note_date_object = current_date + Duration::days(day_of_week.parse::<i64>().unwrap());
     let date = format!("{}-{}-{}", note_date_object.month(), note_date_object.day(), note_date_object.year());
 
-    // TODO -> This needs to be calculated
     let modified_date_time = chrono::Local::now().timestamp().to_string();
 
     let is_complete = "false";

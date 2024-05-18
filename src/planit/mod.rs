@@ -4,6 +4,7 @@ use std::io::Write;
 use dirs::home_dir;
 
 mod week;
+mod year;
 
 pub fn planit() {
     loop {
@@ -27,15 +28,13 @@ pub fn planit() {
 
         if view.trim().to_lowercase() == "week" {
             week::week_view();
-        } else if view.trim() == "Month" {
+        } else if view.trim().to_lowercase() == "month" {
             println!("\n");
             println!("This bad boy isn't implemented quite yet. Gonna need to try again");
             println!("\n");
-        } else if view.trim() == "Year" {
-            println!("\n");
-            println!("This bad boy isn't implemented quite yet. Gonna need to try again");
-            println!("\n");
-        } else if view.trim() == "quit" {
+        } else if view.trim().to_lowercase() == "year" {
+            year::year_view();
+        } else if view.trim().to_lowercase() == "quit" {
             break;
         } else {
             println!("\n");
