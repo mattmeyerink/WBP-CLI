@@ -5,6 +5,7 @@ use dirs::home_dir;
 
 mod week;
 mod year;
+mod input_utils;
 
 pub fn planit() {
     loop {
