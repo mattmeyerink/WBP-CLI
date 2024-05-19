@@ -6,7 +6,7 @@ use chrono::Local;
 
 use super::data::WeekNote;
 
-pub fn display_days_notes(week_notes: &Vec<WeekNote>, section_title: String, display_id: bool, ) {
+pub fn display_days_notes(week_notes: &Vec<WeekNote>, section_title: String, display_id: bool) {
     println!("{}", section_title);
     println!("--------------");
     for week_note in week_notes {

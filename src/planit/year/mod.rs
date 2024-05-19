@@ -6,6 +6,7 @@ use self::display::print_year_header;
 
 mod actions;
 mod display;
+mod data;
 
 pub fn year_view() {
     let mut current_date = chrono::Local::now();
