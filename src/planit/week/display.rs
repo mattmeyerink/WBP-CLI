@@ -1,11 +1,12 @@
 use std::collections::HashMap;
+use chrono::Duration;
 use chrono::DateTime;
 use chrono::Datelike;
 use chrono::Local;
 
 use super::data::WeekNote;
 
-pub fn display_days_notes(week_notes: &Vec<WeekNote>, section_title: String, display_id: bool) {
+pub fn display_days_notes(week_notes: &Vec<WeekNote>, section_title: String, display_id: bool, ) {
     println!("{}", section_title);
     println!("--------------");
     for week_note in week_notes {
@@ -38,19 +39,32 @@ pub fn display_week_notes(week_notes: HashMap<String, Vec<WeekNote>>, display_id
     println!("Week View - Week of {}-{}-{}", current_date.month(), current_date.day(), current_date.year());
     println!("");
     
-    display_days_notes(week_notes.get(&String::from("0")).unwrap(), String::from("Monday"), display_id);
+    let monday_title = format!("Monday {}-{}-{}", current_date.month(), current_date.day(), current_date.year());
+    display_days_notes(week_notes.get(&String::from("0")).unwrap(), String::from(monday_title), display_id);
 
-    display_days_notes(week_notes.get(&String::from("1")).unwrap(), String::from("Tuesday"), display_id);
+    let tuesday_date = current_date + Duration::days(1);
+    let tuesday_title = format!("Tuesday {}-{}-{}", tuesday_date.month(), tuesday_date.day(), tuesday_date.year());
+    display_days_notes(week_notes.get(&String::from("1")).unwrap(), tuesday_title, display_id);
 
-    display_days_notes(week_notes.get(&String::from("2")).unwrap(), String::from("Wednesday"), display_id);
+    let wednesday_date = current_date + Duration::days(2);
+    let wednesday_title = format!("Wednesday {}-{}-{}", wednesday_date.month(), wednesday_date.day(), wednesday_date.year());
+    display_days_notes(week_notes.get(&String::from("2")).unwrap(), wednesday_title, display_id);
 
-    display_days_notes(week_notes.get(&String::from("3")).unwrap(), String::from("Thursday"), display_id);
+    let thursday_date = current_date + Duration::days(3);
+    let thursday_title = format!("Thursday {}-{}-{}", thursday_date.month(), thursday_date.day(), thursday_date.year());
+    display_days_notes(week_notes.get(&String::from("3")).unwrap(), thursday_title, display_id);
 
-    display_days_notes(week_notes.get(&String::from("4")).unwrap(), String::from("Friday"), display_id);
+    let friday_date = current_date + Duration::days(4);
+    let friday_title = format!("Friday {}-{}-{}", friday_date.month(), friday_date.day(), friday_date.year());
+    display_days_notes(week_notes.get(&String::from("4")).unwrap(), friday_title, display_id);
 
-    display_days_notes(week_notes.get(&String::from("5")).unwrap(), String::from("Saturday"), display_id);
+    let saturday_date = current_date + Duration::days(5);
+    let saturday_title = format!("Saturday {}-{}-{}", saturday_date.month(), saturday_date.day(), saturday_date.year());
+    display_days_notes(week_notes.get(&String::from("5")).unwrap(), saturday_title, display_id);
 
-    display_days_notes(week_notes.get(&String::from("6")).unwrap(), String::from("Sunday"), display_id);
+    let sunday_date = current_date + Duration::days(6);
+    let sunday_title = format!("Sunday {}-{}-{}", sunday_date.month(), sunday_date.day(), sunday_date.year());
+    display_days_notes(week_notes.get(&String::from("6")).unwrap(), sunday_title, display_id);
 
     println!("*****************************************************************************");
     println!("*****************************************************************************");
