@@ -30,7 +30,7 @@ pub fn year_view() {
         io::stdin().read_line(&mut action).expect("Unable to read action");
 
         if action.trim() == "1" {
-            actions::add_new_year_note();
+            actions::add_new_year_note(current_date);
         } else if action.trim() == "2" {
             actions::mark_year_note_complete();
         } else if action.trim() == "3" {

@@ -68,3 +68,24 @@ pub fn get_note_input() -> String {
 
     return note;
 }
+
+pub fn get_note_month() -> String {
+    let valid_months = vec!["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+    let note_month;
+
+    loop {
+        print!("Enter note month (ex 1 = Jan): ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        let mut note_month_raw = String::new();
+        io::stdin().read_line(&mut note_month_raw).expect("Unable to read note");
+
+        if valid_months.contains(&note_month_raw.trim()) {
+            note_month = note_month_raw;
+            break;
+        } else {
+            println!("Can you actually put in a valid note buster?");
+        }
+    }
+
+    return note_month.trim().to_string();
+}
