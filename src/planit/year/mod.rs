@@ -13,6 +13,10 @@ pub fn year_view() {
 
     loop {
         print_year_header(current_date);
+
+        let year_notes = data::fetch_year_notes(current_date);
+
+        display::display_year_notes(year_notes, false, current_date);
         
         println!("Actions you can take.");
         println!("[1]: Add new note.");

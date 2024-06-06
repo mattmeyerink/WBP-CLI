@@ -53,14 +53,16 @@ pub fn fetch_year_notes(current_date: DateTime<Local>) -> HashMap<String, Vec<Ye
         }
 
         let year_note = YearNote {
-            note_id: todo!(),
-            note_type: todo!(),
-            note: todo!(),
-            note_year: todo!(),
-            is_complete: todo!(),
-            note_month: todo!(),
-            modified_date_time: todo!(),
+            note_id: String::from(year_note_array[0]),
+            note_type: String::from(year_note_array[1]),
+            note: String::from(year_note_array[2]),
+            note_year: String::from(year_note_array[3]),
+            is_complete: String::from(year_note_array[4]),
+            note_month: String::from(year_note_array[5]),
+            modified_date_time: String::from(year_note_array[6]),
         };
+
+        year_notes.get_mut(&String::from(year_note_array[5])).unwrap().push(year_note);
     }
 
     return year_notes;
