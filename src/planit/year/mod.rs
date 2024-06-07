@@ -2,8 +2,6 @@ use std::io::{self, Write};
 
 use chrono::Duration;
 
-use self::display::print_year_header;
-
 mod actions;
 mod display;
 mod data;
@@ -12,8 +10,6 @@ pub fn year_view() {
     let mut current_date = chrono::Local::now();
 
     loop {
-        print_year_header(current_date);
-
         let year_notes = data::fetch_year_notes(current_date);
 
         display::display_year_notes(year_notes, false, current_date);
