@@ -149,3 +149,10 @@ pub fn edit_note(current_date: DateTime<Local>) {
 
     write_to_week_notes_file(current_date, updated_week_file_contents);
 }
+
+
+pub fn delete_week_note() {
+    println!("This will be the delete a note action.");
+    println!("");
+    println!("Come back when it's done fool!");
+}

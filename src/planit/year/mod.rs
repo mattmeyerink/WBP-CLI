@@ -18,9 +18,10 @@ pub fn year_view() {
         println!("[1]: Add new note.");
         println!("[2]: Mark a task complete.");
         println!("[3]: Edit a current note.");
-        println!("[4]: Next year.");
+        println!("[4]: Delete a current note.");
         println!("[5]: Previous year.");
-        println!("[6]: Quit year view");
+        println!("[6]: Next year.");
+        println!("[7]: Quit year view");
 
         println!("");
 
@@ -37,10 +38,12 @@ pub fn year_view() {
         } else if action.trim() == "3" {
             actions::edit_year_note();
         } else if action.trim() == "4" {
-            current_date = current_date + Duration::days(365);
+            actions::delete_year_note();
         } else if action.trim() == "5" {
             current_date = current_date - Duration::days(365);
         } else if action.trim() == "6" {
+            current_date = current_date + Duration::days(365);
+        } else if action.trim() == "7" {
             break;
         } else {
             println!("\n");

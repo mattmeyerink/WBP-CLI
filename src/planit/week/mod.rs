@@ -19,9 +19,10 @@ pub fn week_view() {
         println!("[1]: Add new note.");
         println!("[2]: Mark a task complete.");
         println!("[3]: Edit a current note.");
-        println!("[4]: Next week.");
+        println!("[4]: Delete a current note.");
         println!("[5]: Previous week.");
-        println!("[6]: Quit week view");
+        println!("[6]: Next week.");
+        println!("[7]: Quit week view");
 
         println!("");
 
@@ -38,10 +39,12 @@ pub fn week_view() {
         } else if action.trim() == "3" {
             actions::edit_note(current_date);
         } else if action.trim() == "4" {
-            current_date = current_date + Duration::days(7);
+            actions::delete_week_note();
         } else if action.trim() == "5" {
             current_date = current_date - Duration::days(7);
         } else if action.trim() == "6" {
+            current_date = current_date + Duration::days(7);
+        } else if action.trim() == "7" {
             break;
         } else {
             println!("\n");

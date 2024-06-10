@@ -52,3 +52,9 @@ pub fn edit_year_note() {
     println!("");
     println!("Come back when its done fool!");
 }
+
+pub fn delete_year_note() {
+    println!("This will be the delete a note action.");
+    println!("");
+    println!("Come back when it's done fool!");
+}
