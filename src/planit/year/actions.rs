@@ -1,4 +1,7 @@
+use std::{fs::OpenOptions, io::Write};
+
 use chrono::{DateTime, Datelike, Local};
+use dirs::home_dir;
 use uuid::Uuid;
 
 use crate::planit::input_utils::{get_note_input, get_note_month, get_note_type_input};
@@ -17,9 +20,25 @@ pub fn add_new_year_note(current_date: DateTime<Local>) {
     let modified_date_time = chrono::Local::now().timestamp().to_string();
     let is_complete = "false";
 
-    let note_text = format!("{}--{}--{}--{}--{}--{}--{}", note_id, note_month, note_type, note, note_year, modified_date_time, is_complete);
+    let note_text = format!("{}--{}--{}--{}--{}--{}--{}\n", note_id, note_type, note, note_year, is_complete, note_month, modified_date_time);
 
-    println!("{}", note_text);
+    let current_year_note_file_name = format!("{}-YearNotes.txt", current_date.year());
+    let year_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_year_note_file_name);
+
+    // Add a new note
+    let mut data_file = OpenOptions::new()
+        .append(true)
+        .open(year_file_path)
+        .expect("cannot open file");
+
+    // Write to a file
+    data_file
+        .write(note_text.as_bytes())
+        .expect("write failed");
+
+    println!("\n");
+    println!("Your note has been added! Time to party!");
+    println!("\n");
 }
 
 pub fn mark_year_note_complete() {
