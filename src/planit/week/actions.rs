@@ -151,8 +151,43 @@ pub fn edit_note(current_date: DateTime<Local>) {
 }
 
 
-pub fn delete_week_note() {
-    println!("This will be the delete a note action.");
-    println!("");
-    println!("Come back when it's done fool!");
+pub fn delete_week_note(current_date: DateTime<Local>) {
+    let week_file_contents = get_contents_of_week_notes_file(current_date);
+
+    let week_notes = fetch_week_notes(current_date);
+
+    display_week_notes(week_notes, true, current_date);
+
+    let note_id: String;
+    loop {
+        print!("Enter the note_id (Grab from the print out above): ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        let mut note_id_raw = String::new();
+        io::stdin().read_line(&mut note_id_raw).expect("Unable to read note");
+
+        let note_id_raw_format = String::from(note_id_raw.trim());
+        if note_id_raw_format.len() > 0 {
+            note_id = note_id_raw_format;
+            break;
+        } else {
+            println!("It's going to be real confusing for future you if you make a note without text bro.")
+        }
+    }
+
+    // Find the line in the week_file_contents
+    let mut original_line = "";
+    for line in week_file_contents.lines() {
+        if line.contains(&note_id) {
+            original_line = line;
+            break;
+        }
+    }
+
+    let updated_week_file_contents = week_file_contents.replace(original_line, "");
+    
+    if updated_week_file_contents.len() == 0 {
+        return;
+    }
+
+    write_to_week_notes_file(current_date, updated_week_file_contents);
 }

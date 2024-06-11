@@ -39,7 +39,7 @@ pub fn week_view() {
         } else if action.trim() == "3" {
             actions::edit_note(current_date);
         } else if action.trim() == "4" {
-            actions::delete_week_note();
+            actions::delete_week_note(current_date);
         } else if action.trim() == "5" {
             current_date = current_date - Duration::days(7);
         } else if action.trim() == "6" {
