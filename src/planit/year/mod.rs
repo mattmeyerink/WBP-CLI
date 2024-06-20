@@ -38,7 +38,7 @@ pub fn year_view() {
         } else if action.trim() == "3" {
             actions::edit_year_note();
         } else if action.trim() == "4" {
-            actions::delete_year_note();
+            actions::delete_year_note(current_date);
         } else if action.trim() == "5" {
             current_date = current_date - Duration::days(365);
         } else if action.trim() == "6" {

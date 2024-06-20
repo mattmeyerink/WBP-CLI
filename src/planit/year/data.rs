@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fs};
+use std::{collections::HashMap, fs::{self, OpenOptions}, io::Write};
 
 use chrono::{DateTime, Datelike, Local};
 use dirs::home_dir;
@@ -13,7 +13,7 @@ pub struct YearNote {
     pub modified_date_time: String
 }
 
-fn get_contents_of_year_notes_file(current_date: DateTime<Local>) -> String {
+pub fn get_contents_of_year_notes_file(current_date: DateTime<Local>) -> String {
     let current_year_note_file_name = format!("{}-YearNotes.txt", current_date.year());
 
     // Attempt to pull the text file that has this weeks notes
@@ -66,4 +66,21 @@ pub fn fetch_year_notes(current_date: DateTime<Local>) -> HashMap<String, Vec<Ye
     }
 
     return year_notes;
+}
+
+pub fn write_to_year_notes_file(current_date: DateTime<Local>, updated_file_contents: String) {
+    let current_year_note_file_name = format!("{}-YearNotes.txt", current_date.year());
+    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_year_note_file_name);
+
+    // Add a new note
+    let mut data_file = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .open(file_path)
+        .expect("cannot open file");
+
+    // Write to a file
+    data_file
+        .write(updated_file_contents.as_bytes())
+        .expect("write failed");
 }
