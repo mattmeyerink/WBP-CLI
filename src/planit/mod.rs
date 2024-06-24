@@ -5,6 +5,7 @@ use dirs::home_dir;
 
 mod week;
 mod year;
+mod month;
 mod input_utils;
 
 pub fn planit() {
@@ -30,9 +31,7 @@ pub fn planit() {
         if view.trim().to_lowercase() == "week" {
             week::week_view();
         } else if view.trim().to_lowercase() == "month" {
-            println!("\n");
-            println!("This bad boy isn't implemented quite yet. Gonna need to try again");
-            println!("\n");
+            month::month_view();
         } else if view.trim().to_lowercase() == "year" {
             year::year_view();
         } else if view.trim().to_lowercase() == "quit" {
