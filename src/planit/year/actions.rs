@@ -85,10 +85,56 @@ pub fn mark_year_note_complete(current_date: DateTime<Local>) {
     write_to_year_notes_file(current_date, updated_year_file_contents);
 }
 
-pub fn edit_year_note() {
-    println!("This will be the edit a note action.");
-    println!("");
-    println!("Come back when its done fool!");
+pub fn edit_year_note(current_date: DateTime<Local>) {
+    let year_file_contents = get_contents_of_year_notes_file(current_date);
+
+    let year_notes = fetch_year_notes(current_date);
+
+    display_year_notes(year_notes, true, current_date);
+
+    let note_id: String;
+    loop {
+        print!("Enter the note_id (Grab from the print out above): ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        let mut note_id_raw = String::new();
+        io::stdin().read_line(&mut note_id_raw).expect("Unable to read note");
+
+        let note_id_raw_format = String::from(note_id_raw.trim());
+        if note_id_raw_format.len() > 0 {
+            note_id = note_id_raw_format;
+            break;
+        } else {
+            println!("It's going to be real confusing for future you if you make a note without text bro.")
+        }
+    }
+
+    let mut updated_line_vector: Vec<&str> = vec![];
+    let mut original_line = "";
+    // Find the line in the week_file_contents
+    for line in year_file_contents.lines() {
+        if line.contains(&note_id) {
+            original_line = line;
+            updated_line_vector = line.split("--").collect();
+        }
+    }
+
+    let note_month = get_note_month();
+    let note_type = get_note_type_input();
+    let note = get_note_input();
+
+    updated_line_vector[5] = &note_month;
+    updated_line_vector[1] = &note_type;
+    updated_line_vector[2] = &note;
+
+    let updated_line_string = updated_line_vector.join("--");
+
+    let updated_year_file_contents = year_file_contents.replace(original_line, &updated_line_string);
+    
+    if updated_year_file_contents.len() == 0 {
+        return;
+    }
+
+    write_to_year_notes_file(current_date, updated_year_file_contents);
 }
 
 pub fn delete_year_note(current_date: DateTime<Local>) {
