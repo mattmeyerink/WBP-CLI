@@ -6,8 +6,6 @@ mod data;
 mod actions;
 
 pub fn month_view() {
-    let mut current_date = chrono::Local::now();
-
     loop {
         print!("Which view do you want to take? (Highlight/List) or quit to exit: ");
         io::stdout().flush().expect("Darn toilet got stuck again");
@@ -30,11 +28,21 @@ pub fn month_view() {
 }
 
 fn month_highlight_view() {
-    let mut current_date = chrono::Local::now();
-
+    // let mut current_date = chrono::Local::now();
 }
 
 fn month_list_view() {
     let mut current_date = chrono::Local::now();
 
+    let month_notes = data::fetch_month_notes(current_date);
+
+    loop {
+        // Fetch the current state of the month list notes
+
+        // Display those notes
+
+        // Display the actions they can take on these notes
+        
+        // Switch over which action to take.
+    }
 }

@@ -16,7 +16,7 @@ pub struct YearNote {
 pub fn get_contents_of_year_notes_file(current_date: DateTime<Local>) -> String {
     let current_year_note_file_name = format!("{}-YearNotes.txt", current_date.year());
 
-    // Attempt to pull the text file that has this weeks notes
+    // Attempt to pull the text file that has this year's notes
     let year_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_year_note_file_name);
     if !year_file_path.exists() {
         std::fs::File::create_new(&year_file_path).expect("There was an error making the needed file");
