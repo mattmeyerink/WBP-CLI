@@ -1,5 +1,7 @@
 use std::io::{self, Write};
 
+use chrono::Months;
+
 mod utils;
 mod display;
 mod data;
@@ -32,18 +34,56 @@ fn month_highlight_view() {
 }
 
 fn month_list_view() {
-    let current_date = chrono::Local::now();
+    let mut current_date = chrono::Local::now();
 
     loop {
         let month_notes = data::fetch_month_notes(current_date);
 
         display::display_month_notes(current_date, month_notes, false);
-        // Fetch the current state of the month list notes
-
-        // Display those notes
-
-        // Display the actions they can take on these notes
         
-        // Switch over which action to take.
+        println!("Actions you can take.");
+        println!("[1]: Add new note.");
+        println!("[2]: Mark a task complete.");
+        println!("[3]: Edit a current note.");
+        println!("[4]: Delete a current note.");
+        println!("[5]: Previous month.");
+        println!("[6]: Next month.");
+        println!("[7]: Quit month note list view");
+
+        println!("");
+
+        print!("Which action do you want to take: ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+
+        let mut action = String::new();
+        io::stdin().read_line(&mut action).expect("Unable to read action");
+
+        if action.trim() == "1" {
+            println!("\n");
+            println!("Whoops haven't implemented this one yet!");
+            println!("\n");
+        } else if action.trim() == "2" {
+            println!("\n");
+            println!("Whoops haven't implemented this one yet!");
+            println!("\n");
+        } else if action.trim() == "3" {
+            println!("\n");
+            println!("Whoops haven't implemented this one yet!");
+            println!("\n");
+        } else if action.trim() == "4" {
+            println!("\n");
+            println!("Whoops haven't implemented this one yet!");
+            println!("\n");
+        } else if action.trim() == "5" {
+            current_date = current_date.checked_sub_months(Months::new(1)).unwrap();
+        } else if action.trim() == "6" {
+            current_date = current_date.checked_add_months(Months::new(1)).unwrap();
+        } else if action.trim() == "7" {
+            break;
+        } else {
+            println!("\n");
+            println!("Boooo thats not a correct action");
+            println!("\n");
+        }
     }
 }
