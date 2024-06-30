@@ -1,6 +1,6 @@
 use std::io::{self, Write};
 
-use chrono::Duration;
+use chrono::Months;
 
 mod actions;
 mod display;
@@ -40,9 +40,9 @@ pub fn year_view() {
         } else if action.trim() == "4" {
             actions::delete_year_note(current_date);
         } else if action.trim() == "5" {
-            current_date = current_date - Duration::days(365);
+            current_date = current_date.checked_sub_months(Months::new(12)).unwrap();
         } else if action.trim() == "6" {
-            current_date = current_date + Duration::days(365);
+            current_date = current_date.checked_add_months(Months::new(12)).unwrap();
         } else if action.trim() == "7" {
             break;
         } else {
