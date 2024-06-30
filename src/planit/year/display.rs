@@ -43,7 +43,6 @@ fn display_year_month_notes(month_notes: &Vec<YearNote>, display_id: bool, month
         } else {
             println!("{} {}", note_symbol, month_note.note);
         }
-        
     }
     println!("");
 }

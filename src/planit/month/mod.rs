@@ -32,11 +32,12 @@ fn month_highlight_view() {
 }
 
 fn month_list_view() {
-    let mut current_date = chrono::Local::now();
-
-    let month_notes = data::fetch_month_notes(current_date);
+    let current_date = chrono::Local::now();
 
     loop {
+        let month_notes = data::fetch_month_notes(current_date);
+
+        display::display_month_notes(current_date, month_notes, false);
         // Fetch the current state of the month list notes
 
         // Display those notes
