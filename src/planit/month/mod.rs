@@ -59,9 +59,7 @@ fn month_list_view() {
         io::stdin().read_line(&mut action).expect("Unable to read action");
 
         if action.trim() == "1" {
-            println!("\n");
-            println!("Whoops haven't implemented this one yet!");
-            println!("\n");
+            actions::add_month_note(current_date);
         } else if action.trim() == "2" {
             println!("\n");
             println!("Whoops haven't implemented this one yet!");
