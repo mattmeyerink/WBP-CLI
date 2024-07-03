@@ -69,9 +69,7 @@ fn month_list_view() {
             println!("Whoops haven't implemented this one yet!");
             println!("\n");
         } else if action.trim() == "4" {
-            println!("\n");
-            println!("Whoops haven't implemented this one yet!");
-            println!("\n");
+            actions::delete_month_note(current_date);
         } else if action.trim() == "5" {
             current_date = current_date.checked_sub_months(Months::new(1)).unwrap();
         } else if action.trim() == "6" {

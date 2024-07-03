@@ -1,4 +1,4 @@
-use std::fs;
+use std::{fs::{self, OpenOptions}, io::Write};
 
 use chrono::{DateTime, Datelike, Local};
 use dirs::home_dir;
@@ -12,7 +12,7 @@ pub struct MonthNote {
     pub modified_date_time: String
 }
 
-fn get_contents_of_month_notes_file(current_date: DateTime<Local>) -> String {
+pub fn get_contents_of_month_notes_file(current_date: DateTime<Local>) -> String {
     let current_month_note_file_name = format!("{}-{}-MonthNotes.txt", current_date.month(), current_date.year());
 
     // Attempt to pull the text file that has this month's notes
@@ -51,4 +51,21 @@ pub fn fetch_month_notes(current_date: DateTime<Local>) -> Vec<MonthNote> {
     }
 
     return month_notes;
+}
+
+pub fn write_to_month_notes_file(current_date: DateTime<Local>, updated_file_contents: String) {
+    let file_name = format!("{}-{}-MonthNotes.txt", current_date.month(), current_date.year());
+    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(file_name);
+
+    // Add a new note
+    let mut data_file = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .open(file_path)
+        .expect("cannot open file");
+
+    // Write to a file
+    data_file
+        .write(updated_file_contents.as_bytes())
+        .expect("write failed");
 }
