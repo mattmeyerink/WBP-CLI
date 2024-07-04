@@ -86,3 +86,45 @@ pub fn delete_month_note(current_date: DateTime<Local>) {
 
     write_to_month_notes_file(current_date, updated_week_file_contents);
 }
+
+pub fn mark_month_note_complete(current_date: DateTime<Local>) {
+    let month_notes_file_contents = get_contents_of_month_notes_file(current_date);
+
+    let month_notes = fetch_month_notes(current_date);
+
+    display_month_notes(current_date, month_notes, true);
+
+    let note_id: String;
+    loop {
+        print!("Enter the note_id (Grab from the print out above): ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        let mut note_id_raw = String::new();
+        io::stdin().read_line(&mut note_id_raw).expect("Unable to read note");
+
+        let note_id_raw_format = String::from(note_id_raw.trim());
+        if note_id_raw_format.len() > 0 {
+            note_id = note_id_raw_format;
+            break;
+        } else {
+            println!("It's going to be real confusing for future you if you make a note without text bro.")
+        }
+    }
+
+    let mut updated_month_notes_file_contents = String::from("");
+    for line in month_notes_file_contents.lines() {
+        if line.contains(&note_id) {
+            let mut updated_line_vector: Vec<&str> = line.split("--").collect();
+            updated_line_vector[4] = "true";
+
+            let updated_line_string = updated_line_vector.join("--");
+
+            updated_month_notes_file_contents = month_notes_file_contents.replace(line, &updated_line_string);
+        }
+    }
+
+    if updated_month_notes_file_contents.len() == 0 {
+        return;
+    }
+
+    write_to_month_notes_file(current_date, updated_month_notes_file_contents);
+}

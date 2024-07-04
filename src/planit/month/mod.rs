@@ -61,9 +61,7 @@ fn month_list_view() {
         if action.trim() == "1" {
             actions::add_month_note(current_date);
         } else if action.trim() == "2" {
-            println!("\n");
-            println!("Whoops haven't implemented this one yet!");
-            println!("\n");
+            actions::mark_month_note_complete(current_date);
         } else if action.trim() == "3" {
             println!("\n");
             println!("Whoops haven't implemented this one yet!");
