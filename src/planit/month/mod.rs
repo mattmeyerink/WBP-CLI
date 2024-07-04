@@ -63,9 +63,7 @@ fn month_list_view() {
         } else if action.trim() == "2" {
             actions::mark_month_note_complete(current_date);
         } else if action.trim() == "3" {
-            println!("\n");
-            println!("Whoops haven't implemented this one yet!");
-            println!("\n");
+            actions::edit_month_note(current_date);
         } else if action.trim() == "4" {
             actions::delete_month_note(current_date);
         } else if action.trim() == "5" {
