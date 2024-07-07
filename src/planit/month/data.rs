@@ -3,6 +3,8 @@ use std::{fs::{self, OpenOptions}, io::Write};
 use chrono::{DateTime, Datelike, Local};
 use dirs::home_dir;
 
+use super::utils;
+
 pub struct MonthNote {
     pub note_id: String,
     pub note_type: String,
@@ -68,4 +70,41 @@ pub fn write_to_month_notes_file(current_date: DateTime<Local>, updated_file_con
     data_file
         .write(updated_file_contents.as_bytes())
         .expect("write failed");
+}
+
+fn get_contents_of_month_highlights_file(current_date: DateTime<Local>) -> String {
+    let current_month_highlights_file_name = format!("{}-{}-MonthHighlights.txt", current_date.month(), current_date.year());
+
+    // Attempt to pull the text file that has this month's notes
+    let month_highlights_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_month_highlights_file_name);
+    if !month_highlights_file_path.exists() {
+        std::fs::File::create_new(&month_highlights_file_path).expect("There was an error making the needed file");
+    }
+
+    let contents = fs::read_to_string(month_highlights_file_path).expect("Should have been able to read the file");
+
+    return contents;
+}
+
+pub fn fetch_month_highlights(current_date: DateTime<Local>) -> Vec<String> {
+    let contents = get_contents_of_month_highlights_file(current_date);
+
+    let days_in_current_month = usize::try_from(utils::get_number_of_days_in_month(current_date)).unwrap();
+    let mut month_highlights: Vec<String>  = vec![String::new(); days_in_current_month];
+
+    for line in contents.lines() {
+        let raw_month_highlight_array: Vec<&str> = line.split("--").collect();
+
+        if raw_month_highlight_array.len() < 2 {
+            continue;
+        }
+
+        let highlight_day_raw_int = raw_month_highlight_array[0].parse::<u32>().unwrap();
+        let highlight_day = usize::try_from(highlight_day_raw_int).unwrap();
+        let highlight_text = String::from(raw_month_highlight_array[1]);
+
+        month_highlights[highlight_day] = highlight_text;
+    }
+
+    return month_highlights;
 }

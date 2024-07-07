@@ -29,10 +29,6 @@ pub fn month_view() {
     }
 }
 
-fn month_highlight_view() {
-    // let mut current_date = chrono::Local::now();
-}
-
 fn month_list_view() {
     let mut current_date = chrono::Local::now();
 
