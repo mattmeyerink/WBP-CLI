@@ -29,6 +29,51 @@ pub fn month_view() {
     }
 }
 
+fn month_highlight_view() {
+    let mut current_date = chrono::Local::now();
+
+    loop {
+        //let month_notes = data::fetch_month_highlights(current_date);
+
+        // TODO -> Display the notes here
+
+        println!("Actions you can take.");
+        println!("[1]: Add a highlight.");
+        println!("[2]: Delete a highlight.");
+        println!("[3]: Previous month.");
+        println!("[4]: Next month.");
+        println!("[5]: Quit month highlight view.");
+
+        println!("");
+
+        print!("Which action do you want to take: ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+
+        let mut action = String::new();
+        io::stdin().read_line(&mut action).expect("Unable to read action");
+
+        if action.trim() == "1" {
+            println!("\n");
+            println!("Haven't done this action yet. Gotta get on that!");
+            println!("\n");
+        } else if action.trim() == "2" {
+            println!("\n");
+            println!("Haven't done this action yet. Gotta get on that!");
+            println!("\n");
+        } else if action.trim() == "3" {
+            current_date = current_date.checked_sub_months(Months::new(1)).unwrap();
+        } else if action.trim() == "4" {
+            current_date = current_date.checked_add_months(Months::new(1)).unwrap();
+        } else if action.trim() == "5" {
+            break;
+        } else {
+            println!("\n");
+            println!("Boooo thats not a correct action");
+            println!("\n");
+        }
+    }
+}
+
 fn month_list_view() {
     let mut current_date = chrono::Local::now();
 
