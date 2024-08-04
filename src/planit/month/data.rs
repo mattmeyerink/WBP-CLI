@@ -3,7 +3,7 @@ use std::{fs::{self, OpenOptions}, io::Write};
 use chrono::{DateTime, Datelike, Local};
 use dirs::home_dir;
 
-use super::utils;
+use crate::planit::utils;
 
 pub struct MonthNote {
     pub note_id: String,
@@ -31,7 +31,7 @@ pub fn get_contents_of_month_notes_file(current_date: DateTime<Local>) -> String
 pub fn fetch_month_notes(current_date: DateTime<Local>) -> Vec<MonthNote> {
     let contents = get_contents_of_month_notes_file(current_date);
 
-    let mut month_notes: Vec<MonthNote>  = Vec::new();
+    let mut month_notes: Vec<MonthNote> = Vec::new();
 
     for line in contents.lines() {
         let raw_month_note_array: Vec<&str> = line.split("--").collect();
@@ -99,7 +99,8 @@ pub fn fetch_month_highlights(current_date: DateTime<Local>) -> Vec<String> {
             continue;
         }
 
-        let highlight_day_raw_int = raw_month_highlight_array[0].parse::<u32>().unwrap();
+        // Days are saved unzeroed but they need to be zeroed for indexing
+        let highlight_day_raw_int = raw_month_highlight_array[0].parse::<u32>().unwrap() - 1;
         let highlight_day = usize::try_from(highlight_day_raw_int).unwrap();
         let highlight_text = String::from(raw_month_highlight_array[1]);
 

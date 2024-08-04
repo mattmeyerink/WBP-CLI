@@ -5,7 +5,7 @@ use chrono::{DateTime, Datelike, Local};
 use dirs::home_dir;
 use uuid::Uuid;
 
-use crate::planit::input_utils::{get_note_input, get_note_type_input};
+use crate::planit::input_utils::{get_highlight_day_input, get_highlight_input, get_note_input, get_note_type_input};
 
 use super::{data::{fetch_month_notes, get_contents_of_month_notes_file, write_to_month_notes_file}, display::display_month_notes};
 
@@ -43,6 +43,35 @@ pub fn add_month_note(current_date: DateTime<Local>) {
 
     println!("\n");
     println!("Your note has been added! Time to party!");
+    println!("\n");
+}
+
+pub fn add_month_highlight(current_date: DateTime<Local>) {
+    println!("");
+    println!("A new highlight it is good sir or madam!");
+    println!("Fill out the following information and it will be done!");
+    println!("");
+
+    let highlight_day = get_highlight_day_input(current_date);
+    let highlight = get_highlight_input();
+
+    let new_highlight = format!("{}--{}\n", highlight_day, highlight);
+
+    let current_month_highlights_file_name = format!("{}-{}-MonthHighlights.txt", current_date.month(), current_date.year());
+    let month_highlights_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_month_highlights_file_name);
+
+    let mut data_file = OpenOptions::new()
+        .append(true)
+        .open(month_highlights_file_path)
+        .expect("cannot open file");
+
+    // Write to a file
+    data_file
+        .write(new_highlight.as_bytes())
+        .expect("write failed");
+
+    println!("\n");
+    println!("Your highlight has been added! Time to party!");
     println!("\n");
 }
 

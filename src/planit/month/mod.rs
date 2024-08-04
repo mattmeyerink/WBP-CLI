@@ -2,7 +2,6 @@ use std::io::{self, Write};
 
 use chrono::Months;
 
-mod utils;
 mod display;
 mod data;
 mod actions;
@@ -53,9 +52,7 @@ fn month_highlight_view() {
         io::stdin().read_line(&mut action).expect("Unable to read action");
 
         if action.trim() == "1" {
-            println!("\n");
-            println!("Haven't done this action yet. Gotta get on that!");
-            println!("\n");
+            actions::add_month_highlight(current_date);
         } else if action.trim() == "2" {
             println!("\n");
             println!("Haven't done this action yet. Gotta get on that!");

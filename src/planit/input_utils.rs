@@ -1,5 +1,9 @@
 use std::{collections::HashMap, io::{self, Write}};
 
+use chrono::{DateTime, Local};
+
+use super::utils;
+
 pub fn get_day_of_week_input() -> String {
     let day_of_week;
     let day_of_week_to_weekday: HashMap<String, String> = HashMap::from([
@@ -88,4 +92,49 @@ pub fn get_note_month() -> String {
     }
 
     return note_month.trim().to_string();
+}
+
+pub fn get_highlight_input() -> String {
+    let highlight;
+    loop {
+        print!("Enter your highlight: ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        let mut highlight_raw = String::new();
+        io::stdin().read_line(&mut highlight_raw).expect("Unable to read highlight");
+
+        let highlight_raw_format = String::from(highlight_raw.trim());
+        if highlight_raw_format.len() > 0 {
+            highlight = highlight_raw_format;
+            break;
+        } else {
+            println!("It's going to be real confusing for future you if you make a highlight without text bro.")
+        }
+    }
+
+    return highlight;
+}
+
+pub fn get_highlight_day_input(current_date: DateTime<Local>) -> String {
+    let highlight_day;
+    let mut valid_day_strings: Vec<String> = Vec::new();
+    let number_of_days_in_month = utils::get_number_of_days_in_month(current_date);
+    for day_in_month in 0..number_of_days_in_month {
+        valid_day_strings.push((day_in_month + 1).to_string());
+    }
+
+    loop {
+        print!("Enter highlight day: ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        let mut highlight_day_raw = String::new();
+        io::stdin().read_line(&mut highlight_day_raw).expect("Unable to read day");
+
+        if valid_day_strings.contains(&String::from(highlight_day_raw.trim())) {
+            highlight_day = highlight_day_raw;
+            break;
+        } else {
+            println!("Can you actually put in a valid day buster?");
+        }
+    }
+
+    return highlight_day.trim().to_string();
 }

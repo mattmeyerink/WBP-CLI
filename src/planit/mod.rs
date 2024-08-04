@@ -7,6 +7,7 @@ mod week;
 mod year;
 mod month;
 mod input_utils;
+mod utils;
 
 pub fn planit() {
     loop {
