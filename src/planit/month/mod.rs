@@ -33,9 +33,9 @@ fn month_highlight_view() {
     let mut current_date = chrono::Local::now();
 
     loop {
-        //let month_notes = data::fetch_month_highlights(current_date);
+        let month_highlights = data::fetch_month_highlights(current_date);
 
-        // TODO -> Display the notes here
+        display::display_month_highlights(current_date, month_highlights);
 
         println!("Actions you can take.");
         println!("[1]: Add a highlight.");

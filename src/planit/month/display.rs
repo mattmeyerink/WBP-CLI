@@ -29,3 +29,25 @@ pub fn display_month_notes(current_date: DateTime<Local>, month_notes: Vec<Month
     }
     println!("");
 }
+
+pub fn display_month_highlights(current_date: DateTime<Local>, month_highlights: Vec<String>) {
+    let month_names = vec!["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    let safe_current_month = usize::try_from(current_date.month0()).unwrap();
+    println!("");
+    println!("{} {} Month Highlights", month_names.get(safe_current_month).unwrap(), current_date.year());
+    println!("---------------------------------------------");
+
+    for day_of_month_zeroed in 0..month_highlights.len() {
+        let month_highlight = month_highlights.get(day_of_month_zeroed).unwrap();
+        let formatted_day_string = (day_of_month_zeroed + 1).to_string();
+
+        if month_highlight.len() > 0 {
+            println!("{} - {}", formatted_day_string, month_highlight);
+        } else {
+            println!("{}", formatted_day_string);
+        }
+    }
+
+    println!("");
+}
