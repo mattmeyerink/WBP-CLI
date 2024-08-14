@@ -38,7 +38,7 @@ pub fn add_new_week_note(current_date: DateTime<Local>) {
     let new_note = format!("{}--{}--{}--{}--{}--{}--{}\n", note_id, date, day_of_week, note_type, is_complete, note, modified_date_time);
 
     let file_name = format!("{}-{}-{}-WeekNotes.txt", current_date.month(), current_date.day(), current_date.year());
-    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(file_name);
+    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_date.year().to_string()).join("week-notes").join(file_name);
 
     // Add a new note
     let mut data_file = OpenOptions::new()

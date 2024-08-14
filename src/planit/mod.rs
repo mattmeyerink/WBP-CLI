@@ -21,6 +21,8 @@ pub fn planit() {
         // organization than a year directory. 
         // At most a year will have 52 week files, 24 month files and 1 year file.
         // This should be done before we package the first version as it is relating to data structure.
+        // This will actually need to be done down in each action I think since
+        // down in each section of the app the current date can change.
 
         // TODO -> Add the ability to set the current date. Not sure if this 
         // Should be just setting the date and then everything else remains the same

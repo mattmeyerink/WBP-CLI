@@ -21,7 +21,7 @@ pub fn get_contents_of_week_notes_file(current_date: DateTime<Local>) -> String 
     let current_week_monday_date_string = format!("{}-{}-{}-WeekNotes.txt", current_date.month(), current_date.day(), current_date.year());
 
     // Attempt to pull the text file that has this weeks notes
-    let week_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_week_monday_date_string);
+    let week_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_date.year().to_string()).join("week-notes").join(current_week_monday_date_string);
     if !week_file_path.exists() {
         std::fs::File::create_new(&week_file_path).expect("There was an error making the needed file");
     }
@@ -69,7 +69,7 @@ pub fn fetch_week_notes(current_date: DateTime<Local>) -> HashMap<String, Vec<We
 
 pub fn write_to_week_notes_file(current_date: DateTime<Local>, updated_file_contents: String) {
     let file_name = format!("{}-{}-{}-WeekNotes.txt", current_date.month(), current_date.day(), current_date.year());
-    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(file_name);
+    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_date.year().to_string()).join("week-notes").join(file_name);
 
     // Add a new note
     let mut data_file = OpenOptions::new()

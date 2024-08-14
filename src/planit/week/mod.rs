@@ -1,6 +1,7 @@
-use std::io;
+use std::{fs, io};
 use std::io::Write;
-use chrono::Duration;
+use chrono::{Datelike, Duration};
+use dirs::home_dir;
 
 mod utils;
 mod data;
@@ -11,6 +12,19 @@ pub fn week_view() {
     let mut current_date = utils::get_current_week_monday();
 
     loop {
+        // Create the outer dir for the current year if it doesn't already exist
+        let current_year = current_date.year().to_string();
+        let current_wbp_plan_it_year_data_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_year.clone());
+        if !current_wbp_plan_it_year_data_path.exists() {
+            fs::create_dir(&current_wbp_plan_it_year_data_path).expect("Unable to make current year outer dir");
+        }
+
+        // Create the dir for the week notes within the current year directory if it doesn't already exist
+        let current_wbp_plan_it_week_notes_data_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_year).join("week-notes");
+        if !current_wbp_plan_it_week_notes_data_path.exists() {
+            fs::create_dir(&current_wbp_plan_it_week_notes_data_path).expect("Unable to make current week notes dir");
+        }
+
         let week_notes = data::fetch_week_notes(current_date);
 
         display::display_week_notes(week_notes, false, current_date);
