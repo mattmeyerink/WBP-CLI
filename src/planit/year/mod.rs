@@ -1,6 +1,7 @@
-use std::io::{self, Write};
+use std::{fs, io::{self, Write}};
 
-use chrono::Months;
+use chrono::{Datelike, Months};
+use dirs::home_dir;
 
 mod actions;
 mod display;
@@ -10,6 +11,13 @@ pub fn year_view() {
     let mut current_date = chrono::Local::now();
 
     loop {
+        // Create the outer dir for the current year if it doesn't already exist
+        let current_year = current_date.year().to_string();
+        let current_wbp_plan_it_year_data_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_year.clone());
+        if !current_wbp_plan_it_year_data_path.exists() {
+            fs::create_dir(&current_wbp_plan_it_year_data_path).expect("Unable to make current year outer dir");
+        }
+        
         let year_notes = data::fetch_year_notes(current_date);
 
         display::display_year_notes(year_notes, false, current_date);
