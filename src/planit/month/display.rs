@@ -10,6 +10,7 @@ pub fn display_month_notes(current_date: DateTime<Local>, month_notes: Vec<Month
     println!("{} {} Month Notes", month_names.get(safe_current_month).unwrap(), current_date.year());
     println!("---------------------------------------------");
 
+    // TODO -> Sort the notes by type and whether they are completed
     for month_note in month_notes {
         let note_symbol;
         if month_note.note_type == "task" && month_note.is_complete == "true" {
@@ -37,6 +38,8 @@ pub fn display_month_highlights(current_date: DateTime<Local>, month_highlights:
     println!("");
     println!("{} {} Month Highlights", month_names.get(safe_current_month).unwrap(), current_date.year());
     println!("---------------------------------------------");
+
+    // TODO -> add abbreviation for the day of the week next to each listed day.
 
     for day_of_month_zeroed in 0..month_highlights.len() {
         let month_highlight = month_highlights.get(day_of_month_zeroed).unwrap();

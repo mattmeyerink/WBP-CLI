@@ -17,7 +17,14 @@ pub fn planit() {
             fs::create_dir(&wbp_plan_it_data_path).expect("Unable to make plan it dir");
         }
 
-        // TODO -> Maybe add a step to create a year directory
+        // TODO -> Maybe add a step to create a year directory. Probably don't need more
+        // organization than a year directory. 
+        // At most a year will have 52 week files, 24 month files and 1 year file.
+        // This should be done before we package the first version as it is relating to data structure.
+
+        // TODO -> Add the ability to set the current date. Not sure if this 
+        // Should be just setting the date and then everything else remains the same
+        // or if this is a search part of the experience or if there should be both.
 
         println!("");
         println!("Welcome to PlanIt!");

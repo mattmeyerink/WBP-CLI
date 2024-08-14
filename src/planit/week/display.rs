@@ -9,6 +9,8 @@ use super::data::WeekNote;
 pub fn display_days_notes(week_notes: &Vec<WeekNote>, section_title: String, display_id: bool) {
     println!("{}", section_title);
     println!("--------------");
+
+    // TODO -> Sort the tasks by type and whether they are completed
     for week_note in week_notes {
         let note_symbol;
         if week_note.note_type == "task" && week_note.is_complete == "true" {

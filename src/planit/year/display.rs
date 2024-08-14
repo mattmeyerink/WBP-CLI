@@ -27,6 +27,8 @@ fn display_year_month_notes(month_notes: &Vec<YearNote>, display_id: bool, month
 
     println!("{}", month_names.get(month_to_display).unwrap());
     println!("--------------");
+
+    // TODO -> Sort the notes by type and by completion status
     for month_note in month_notes {
         let note_symbol;
         if month_note.note_type == "task" && month_note.is_complete == "true" {
