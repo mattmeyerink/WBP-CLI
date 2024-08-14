@@ -2,28 +2,50 @@
 
 This repo contains source code for the WBP CLI Tool. This tool will eventually serve many purposes.
 As for now the list of purposes can be found below in the app list. Data storage for all of the apps
-relys on local text files leaving all of your data in your control making it super easy to backup!
+relys on local text files leaving all of your data in your control making it super easy to backup
+in whatever way works best for you!
 
 ### PlanIt
 
-This app is a bullet journal style planner in the CLI that relys on easy to backup text files!
-This allows you to be in control of all of your own data at all times while allowing us to 
-save on server costs and prevent us from needing to build out a UI from scratch.
+This app is a bullet journal style planner that contains the following note templates.
+
+- Year View: This is a list based view with a list for each month in a given year. Intended for
+high level tasks, events, and notes.
+- Month List View: This is a list view of a specific month meant to be updated at the begining of each month.
+This contains tasks and notes that are not yet bound by a specific date but that you know will be 
+relevant in the coming month.
+- Month Highlight View: This is an overview of key events that occured/will occur in a given month. Only 
+note allowed per day so choose your words carfully!
+- Week View: This is a list based view with a list for each day. This is likely where you will spend most of your time as it contains granular tasks, notes, and events relevant to a specific day.
+
+#### Note Types
+
+`o` : Indicates a task that has not yet been completed.
+`x` : Indicates a task that has been completed.
+`-` : Indicates a note or thought that has no particular action attached to it.
+`*` : Indicates an event.
+
+#### Data Structure
 
 Notes are saved using the following structure.
-All Notes are saved in the /Documents directory
+All Notes are saved in the `/Documents/wbp-data/plan-it` directory
 
 Week Notes
-Filename - `month.mondayDate.year.weekNotes.txt`
-Each line is a note in the format noteID-date-dayOfTheWeek-noteType-isComplete-note-lastUpdated
+Filename - `{{month}}-{{mondayDate}}-{{year}}-WeekNotes.txt`
 
+Month List View Notes
+Filename - `{{month}}-{{year}}-MonthNotes.txt`
+
+Month Highlights 
+Filename - `{{month}}-{{year}}-MonthHighlights.txt`
+
+Year Notes
+Filename - `{{year}}-YearNotes.txt`
+
+### RecipeCentral
+
+Potentially in the works. TBD.
 
 ### MilesOnMiles
 
-Running mileage and and workout tracker that relys on easy to backup text files!
-This allows you to be in control of all of your own data at all times while allowing us to 
-save on server costs and prevent us from needing to build out a UI from scratch.
-
-I think the key here is being able to see granular data over the years. One limitation with strava
-is you can only look back month by month for so long. Having all of the data on your own device
-we can map out monthly/weekly mileage over YEARS if we want to all from the CLI.
+Potentially in the works. TBD.
