@@ -31,15 +31,19 @@ Notes are saved using the following structure.
 All Notes are saved in the `/Documents/wbp-data/plan-it` directory
 
 Week Notes
+Sub-Directory - `/{{year}}/week-notes`
 Filename - `{{month}}-{{mondayDate}}-{{year}}-WeekNotes.txt`
 
 Month List View Notes
+Sub-Directory: `/{{year}}/month-notes/month-lists`
 Filename - `{{month}}-{{year}}-MonthNotes.txt`
 
 Month Highlights 
+Sub-Directory: `/{{year}}/month-notes/month-highlights`
 Filename - `{{month}}-{{year}}-MonthHighlights.txt`
 
 Year Notes
+Sub-Directory: `/{{year}}`
 Filename - `{{year}}-YearNotes.txt`
 
 ### RecipeCentral
