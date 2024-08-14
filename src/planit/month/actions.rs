@@ -7,7 +7,7 @@ use uuid::Uuid;
 
 use crate::planit::input_utils::{get_highlight_day_input, get_highlight_input, get_note_input, get_note_type_input};
 
-use super::{data::{fetch_month_notes, get_contents_of_month_notes_file, write_to_month_notes_file}, display::display_month_notes};
+use super::{data::{fetch_month_highlights, fetch_month_notes, get_contents_of_month_highlights_file, get_contents_of_month_notes_file, write_to_month_highlights_file, write_to_month_notes_file}, display::{display_month_highlights, display_month_notes}};
 
 pub fn add_month_note(current_date: DateTime<Local>) {
     println!("");
@@ -114,6 +114,29 @@ pub fn delete_month_note(current_date: DateTime<Local>) {
     }
 
     write_to_month_notes_file(current_date, updated_week_file_contents);
+}
+
+pub fn delete_month_highlight(current_date: DateTime<Local>) {
+    let month_highlight_file_contents = get_contents_of_month_highlights_file(current_date);
+
+    let month_highlights = fetch_month_highlights(current_date);
+
+    display_month_highlights(current_date, month_highlights);
+
+    let highlight_day = get_highlight_day_input(current_date);
+
+    let mut line_to_delete = "";
+    for highlight_line in month_highlight_file_contents.lines() {
+        let current_highlight_day = highlight_line.split("--").next().unwrap();
+        if String::from(current_highlight_day) == highlight_day {
+            line_to_delete = highlight_line;
+            break;
+        }
+    }
+
+    let updated_month_highlight_file_contents = month_highlight_file_contents.replace(line_to_delete, "");
+
+    write_to_month_highlights_file(current_date, updated_month_highlight_file_contents);
 }
 
 pub fn mark_month_note_complete(current_date: DateTime<Local>) {

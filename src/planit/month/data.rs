@@ -72,7 +72,24 @@ pub fn write_to_month_notes_file(current_date: DateTime<Local>, updated_file_con
         .expect("write failed");
 }
 
-fn get_contents_of_month_highlights_file(current_date: DateTime<Local>) -> String {
+pub fn write_to_month_highlights_file(current_date: DateTime<Local>, updated_file_contents: String) {
+    let file_name = format!("{}-{}-MonthHighlights.txt", current_date.month(), current_date.year());
+    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(file_name);
+
+    // Add a new note
+    let mut data_file = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .open(file_path)
+        .expect("cannot open file");
+
+    // Write to a file
+    data_file
+        .write(updated_file_contents.as_bytes())
+        .expect("write failed");
+}
+
+pub fn get_contents_of_month_highlights_file(current_date: DateTime<Local>) -> String {
     let current_month_highlights_file_name = format!("{}-{}-MonthHighlights.txt", current_date.month(), current_date.year());
 
     // Attempt to pull the text file that has this month's notes

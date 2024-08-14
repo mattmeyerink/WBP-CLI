@@ -54,9 +54,7 @@ fn month_highlight_view() {
         if action.trim() == "1" {
             actions::add_month_highlight(current_date);
         } else if action.trim() == "2" {
-            println!("\n");
-            println!("Haven't done this action yet. Gotta get on that!");
-            println!("\n");
+            actions::delete_month_highlight(current_date);
         } else if action.trim() == "3" {
             current_date = current_date.checked_sub_months(Months::new(1)).unwrap();
         } else if action.trim() == "4" {
