@@ -1,6 +1,7 @@
-use std::io::{self, Write};
+use std::{fs, io::{self, Write}};
 
-use chrono::Months;
+use chrono::{Datelike, Months};
+use dirs::home_dir;
 
 mod display;
 mod data;
@@ -32,6 +33,25 @@ fn month_highlight_view() {
     let mut current_date = chrono::Local::now();
 
     loop {
+        // Create the outer dir for the current year if it doesn't already exist
+        let current_year = current_date.year().to_string();
+        let current_wbp_plan_it_year_data_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_year.clone());
+        if !current_wbp_plan_it_year_data_path.exists() {
+            fs::create_dir(&current_wbp_plan_it_year_data_path).expect("Unable to make current year outer dir");
+        }
+
+        // Create the dir for the month notes within the current year directory if it doesn't already exist
+        let current_wbp_plan_it_month_notes_data_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_year.clone()).join("month-notes");
+        if !current_wbp_plan_it_month_notes_data_path.exists() {
+            fs::create_dir(&current_wbp_plan_it_month_notes_data_path).expect("Unable to make current week notes dir");
+        }
+
+        // Create the dir for the month highlights within the month notes directory if it doesn't already exist
+        let current_wbp_plan_it_month_highlights_data_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_year.clone()).join("month-notes").join("month-highlights");
+        if !current_wbp_plan_it_month_highlights_data_path.exists() {
+            fs::create_dir(&current_wbp_plan_it_month_highlights_data_path).expect("Unable to make current week notes dir");
+        }
+
         let month_highlights = data::fetch_month_highlights(current_date);
 
         display::display_month_highlights(current_date, month_highlights);
@@ -73,6 +93,25 @@ fn month_list_view() {
     let mut current_date = chrono::Local::now();
 
     loop {
+        // Create the outer dir for the current year if it doesn't already exist
+        let current_year = current_date.year().to_string();
+        let current_wbp_plan_it_year_data_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_year.clone());
+        if !current_wbp_plan_it_year_data_path.exists() {
+            fs::create_dir(&current_wbp_plan_it_year_data_path).expect("Unable to make current year outer dir");
+        }
+
+        // Create the dir for the month notes within the current year directory if it doesn't already exist
+        let current_wbp_plan_it_month_notes_data_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_year.clone()).join("month-notes");
+        if !current_wbp_plan_it_month_notes_data_path.exists() {
+            fs::create_dir(&current_wbp_plan_it_month_notes_data_path).expect("Unable to make current week notes dir");
+        }
+
+        // Create the dir for the month highlights within the month lists directory if it doesn't already exist
+        let current_wbp_plan_it_month_lists_data_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_year.clone()).join("month-notes").join("month-lists");
+        if !current_wbp_plan_it_month_lists_data_path.exists() {
+            fs::create_dir(&current_wbp_plan_it_month_lists_data_path).expect("Unable to make current week notes dir");
+        }
+
         let month_notes = data::fetch_month_notes(current_date);
 
         display::display_month_notes(current_date, month_notes, false);

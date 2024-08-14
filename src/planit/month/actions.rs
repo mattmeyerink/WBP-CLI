@@ -28,7 +28,7 @@ pub fn add_month_note(current_date: DateTime<Local>) {
     let new_note = format!("{}--{}--{}--{}--{}--{}\n", note_id, note_type, note, note_month, is_complete, modified_date_time);
 
     let file_name = format!("{}-{}-MonthNotes.txt", current_date.month(), current_date.year());
-    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(file_name);
+    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_date.year().to_string()).join("month-notes").join("month-lists").join(file_name);
 
     // Add a new note
     let mut data_file = OpenOptions::new()
@@ -71,7 +71,7 @@ pub fn add_month_highlight(current_date: DateTime<Local>) {
     // If there is not a highlight saved for that day append the new highlight. Else overwrite the old highlight.
     if day_highlight_to_overwrite == "" {
         let current_month_highlights_file_name = format!("{}-{}-MonthHighlights.txt", current_date.month(), current_date.year());
-        let month_highlights_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_month_highlights_file_name);
+        let month_highlights_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_date.year().to_string()).join("month-notes").join("month-highlights").join(current_month_highlights_file_name);
 
         let mut data_file = OpenOptions::new()
             .append(true)

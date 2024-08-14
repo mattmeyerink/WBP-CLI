@@ -18,7 +18,7 @@ pub fn get_contents_of_month_notes_file(current_date: DateTime<Local>) -> String
     let current_month_note_file_name = format!("{}-{}-MonthNotes.txt", current_date.month(), current_date.year());
 
     // Attempt to pull the text file that has this month's notes
-    let month_notes_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_month_note_file_name);
+    let month_notes_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_date.year().to_string()).join("month-notes").join("month-lists").join(current_month_note_file_name);
     if !month_notes_file_path.exists() {
         std::fs::File::create_new(&month_notes_file_path).expect("There was an error making the needed file");
     }
@@ -57,7 +57,7 @@ pub fn fetch_month_notes(current_date: DateTime<Local>) -> Vec<MonthNote> {
 
 pub fn write_to_month_notes_file(current_date: DateTime<Local>, updated_file_contents: String) {
     let file_name = format!("{}-{}-MonthNotes.txt", current_date.month(), current_date.year());
-    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(file_name);
+    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_date.year().to_string()).join("month-notes").join("month-lists").join(file_name);
 
     // Add a new note
     let mut data_file = OpenOptions::new()
@@ -74,7 +74,7 @@ pub fn write_to_month_notes_file(current_date: DateTime<Local>, updated_file_con
 
 pub fn write_to_month_highlights_file(current_date: DateTime<Local>, updated_file_contents: String) {
     let file_name = format!("{}-{}-MonthHighlights.txt", current_date.month(), current_date.year());
-    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(file_name);
+    let file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_date.year().to_string()).join("month-notes").join("month-highlights").join(file_name);
 
     // Add a new note
     let mut data_file = OpenOptions::new()
@@ -93,7 +93,7 @@ pub fn get_contents_of_month_highlights_file(current_date: DateTime<Local>) -> S
     let current_month_highlights_file_name = format!("{}-{}-MonthHighlights.txt", current_date.month(), current_date.year());
 
     // Attempt to pull the text file that has this month's notes
-    let month_highlights_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_month_highlights_file_name);
+    let month_highlights_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_date.year().to_string()).join("month-notes").join("month-highlights").join(current_month_highlights_file_name);
     if !month_highlights_file_path.exists() {
         std::fs::File::create_new(&month_highlights_file_path).expect("There was an error making the needed file");
     }
