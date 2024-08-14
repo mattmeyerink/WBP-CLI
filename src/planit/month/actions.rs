@@ -57,18 +57,36 @@ pub fn add_month_highlight(current_date: DateTime<Local>) {
 
     let new_highlight = format!("{}--{}\n", highlight_day, highlight);
 
-    let current_month_highlights_file_name = format!("{}-{}-MonthHighlights.txt", current_date.month(), current_date.year());
-    let month_highlights_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_month_highlights_file_name);
+    // Determine if there is already a highlight saved for that day
+    let month_highlight_file_contents = get_contents_of_month_highlights_file(current_date);
+    let mut day_highlight_to_overwrite = "";
+    for highlight_line in month_highlight_file_contents.lines() {
+        let current_highlight_day = highlight_line.split("--").next().unwrap();
+        if String::from(current_highlight_day) == highlight_day {
+            day_highlight_to_overwrite = highlight_line;
+            break;
+        }
+    }
 
-    let mut data_file = OpenOptions::new()
-        .append(true)
-        .open(month_highlights_file_path)
-        .expect("cannot open file");
+    // If there is not a highlight saved for that day append the new highlight. Else overwrite the old highlight.
+    if day_highlight_to_overwrite == "" {
+        let current_month_highlights_file_name = format!("{}-{}-MonthHighlights.txt", current_date.month(), current_date.year());
+        let month_highlights_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("plan-it").join(current_month_highlights_file_name);
 
-    // Write to a file
-    data_file
-        .write(new_highlight.as_bytes())
-        .expect("write failed");
+        let mut data_file = OpenOptions::new()
+            .append(true)
+            .open(month_highlights_file_path)
+            .expect("cannot open file");
+
+        // Write to a file
+        data_file
+            .write(new_highlight.as_bytes())
+            .expect("write failed");
+    } else {
+        let updated_month_highlight_file_contents = month_highlight_file_contents.replace(day_highlight_to_overwrite, &new_highlight);
+
+        write_to_month_highlights_file(current_date, updated_month_highlight_file_contents);
+    }
 
     println!("\n");
     println!("Your highlight has been added! Time to party!");
