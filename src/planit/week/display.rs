@@ -18,7 +18,7 @@ fn display_week_note_section(note_symbol: &str, display_id: bool, week_notes: Ve
 
 pub fn display_days_notes(week_notes: &Vec<WeekNote>, section_title: String, display_id: bool) {
     println!("{}", section_title);
-    println!("--------------");
+    println!("--------------------------------------------------------------------");
 
     let event_symbol = "*";
     let finished_task_symbol = "x";
