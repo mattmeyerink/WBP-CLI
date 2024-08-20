@@ -6,29 +6,62 @@ use chrono::Local;
 
 use super::data::WeekNote;
 
-pub fn display_days_notes(week_notes: &Vec<WeekNote>, section_title: String, display_id: bool) {
-    println!("{}", section_title);
-    println!("--------------");
-
-    // TODO -> Sort the tasks by type and whether they are completed
+fn display_week_note_section(note_symbol: &str, display_id: bool, week_notes: Vec<&WeekNote>) {
     for week_note in week_notes {
-        let note_symbol;
-        if week_note.note_type == "task" && week_note.is_complete == "true" {
-            note_symbol = "x";
-        } else if week_note.note_type == "task" && week_note.is_complete == "false" {
-            note_symbol = "o";
-        } else if week_note.note_type == "event" {
-            note_symbol = "*";
-        } else {
-            note_symbol = "-";
-        }
         if display_id {
             println!("{} {} ({})", note_symbol, week_note.note, week_note.note_id);
         } else {
             println!("{} {}", note_symbol, week_note.note);
         }
-        
     }
+}
+
+pub fn display_days_notes(week_notes: &Vec<WeekNote>, section_title: String, display_id: bool) {
+    println!("{}", section_title);
+    println!("--------------");
+
+    let event_symbol = "*";
+    let finished_task_symbol = "x";
+    let unfinished_task_symbol = "o";
+    let note_symbol = "-";
+
+    let mut events: Vec<&WeekNote> = vec![];
+    let mut finished_tasks: Vec<&WeekNote> = vec![];
+    let mut unfinished_tasks: Vec<&WeekNote> = vec![]; 
+    let mut notes: Vec<&WeekNote> = vec![];
+
+    for week_note in week_notes {
+        if week_note.note_type == "task" && week_note.is_complete == "true" {
+            finished_tasks.push(week_note)
+        } else if week_note.note_type == "task" && week_note.is_complete == "false" {
+            unfinished_tasks.push(week_note)
+        } else if week_note.note_type == "event" {
+            events.push(week_note)
+        } else {
+            notes.push(week_note)
+        }
+    }
+
+    let tasks_present = finished_tasks.len() > 0 || unfinished_tasks.len() > 0;
+    let print_space_after_events = events.len() > 0 && (tasks_present || notes.len() > 0);
+    let print_space_after_tasks = tasks_present && notes.len() > 0;
+
+    display_week_note_section(&event_symbol, display_id, events);
+
+    // Give some extra visual space if we have some after some events tasks incoming
+    if print_space_after_events {
+        println!("");
+    }
+
+    display_week_note_section(&finished_task_symbol, display_id, finished_tasks);
+    display_week_note_section(&unfinished_task_symbol, display_id, unfinished_tasks);
+
+    // Give some extra visual space if we have some notes incoming
+    if print_space_after_tasks {
+        println!("");
+    }
+
+    display_week_note_section(&note_symbol, display_id, notes);
     println!("");
 }
 
