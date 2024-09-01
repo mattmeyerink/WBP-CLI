@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::fs::OpenOptions;
 use std::io;
 use std::io::Write;
@@ -63,39 +64,44 @@ pub fn mark_week_note_completed(current_date: DateTime<Local>) {
 
     display_week_notes(week_notes, true, current_date);
 
-    let note_id: String;
+    let note_ids: String;
     loop {
-        print!("Enter the note_id (Grab from the print out above): ");
+        print!("Enter the note_id(s) (Comma separate multiple ids): ");
         io::stdout().flush().expect("Darn toilet got stuck again");
-        let mut note_id_raw = String::new();
-        io::stdin().read_line(&mut note_id_raw).expect("Unable to read note");
+        let mut note_ids_raw = String::new();
+        io::stdin().read_line(&mut note_ids_raw).expect("Unable to read note");
 
-        let note_id_raw_format = String::from(note_id_raw.trim());
-        if note_id_raw_format.len() > 0 {
-            note_id = note_id_raw_format;
+        let note_ids_raw_format = String::from(note_ids_raw.trim());
+        if note_ids_raw_format.len() > 0 {
+            note_ids = note_ids_raw_format;
             break;
         } else {
             println!("It's going to be real confusing for future you if you make a note without text bro.")
         }
     }
 
-    let mut updated_week_file_contents = String::from("");
+    // Make a set of the comma separated note ids passed in
+    let mut note_ids_to_mark_complete = HashSet::new();
+    let note_ids_split_list: Vec<&str> = note_ids.split(",").collect();
+    for note_id in note_ids_split_list {
+        note_ids_to_mark_complete.insert(note_id.to_string());
+    }
+
+    let mut output_week_file_contents = week_file_contents.to_string();
     for line in week_file_contents.lines() {
-        if line.contains(&note_id) {
-            let mut updated_line_vector: Vec<&str> = line.split("--").collect();
+        let mut updated_line_vector: Vec<&str> = line.split("--").collect();
+        let current_line_note_id = updated_line_vector[0];
+
+        if note_ids_to_mark_complete.contains(current_line_note_id) {
             updated_line_vector[4] = "true";
 
             let updated_line_string = updated_line_vector.join("--");
 
-            updated_week_file_contents = week_file_contents.replace(line, &updated_line_string);
+            output_week_file_contents = output_week_file_contents.replace(line, &updated_line_string);
         }
     }
 
-    if updated_week_file_contents.len() == 0 {
-        return;
-    }
-
-    write_to_week_notes_file(current_date, updated_week_file_contents);
+    write_to_week_notes_file(current_date, output_week_file_contents);
 }
 
 pub fn edit_note(current_date: DateTime<Local>) {
