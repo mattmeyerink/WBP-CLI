@@ -22,7 +22,23 @@ pub fn planit() {
         // or if this is a search part of the experience or if there should be both.
 
         println!("");
+        println!("***********************************************************************");
+        
+        println!("");
         println!("Welcome to PlanIt!");
+        println!("");
+
+        println!("
+                ,..........   ..........,
+            ,..,'          '.'          ',..,
+            ,' ,'    THE     :    PLAN    ', ',
+            ,' ,'    BEST     :   EVER!     ', ',
+            ,' ,'              :              ', ',
+            ,' ,'............., : ,.............', ',
+            ,'  '............   '.'   ............'  ',
+            '''''''''''''''''';''';''''''''''''''''''
+                                '''
+        ");
         println!("");
 
         print!("Which view do you want to take? (Week, Month, Year) or quit to exit: ");
