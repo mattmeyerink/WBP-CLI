@@ -4,7 +4,7 @@ use dirs::home_dir;
 use std::io::Write;
 
 mod planit;
-
+mod milesonmiles;
 
 fn main() {
     println!("");
@@ -37,7 +37,7 @@ fn main() {
         fs::create_dir(&wbp_data_path).expect("Unable to create needed data directory");
     }
 
-    print!("Enter an app (planit): ");
+    print!("Enter an app (planit/milesonmiles): ");
     io::stdout().flush().expect("Darn toilet got stuck again");
 
     let mut app = String::new();
@@ -47,6 +47,8 @@ fn main() {
 
     if app.trim() == "planit" {
         planit::planit();
+    } else if app.trim() == "milesonmiles" {
+        milesonmiles::milesonmiles();
     } else {
         println!("That is not a supported app");
     }
