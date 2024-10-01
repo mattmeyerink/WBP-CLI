@@ -6,6 +6,7 @@ mod utils;
 mod actions;
 mod data;
 mod display;
+mod input_utils;
 
 pub fn milesonmiles() {
     println!("Welcome to Miles on Miles!");
@@ -36,7 +37,7 @@ pub fn milesonmiles() {
         io::stdin().read_line(&mut action).expect("Unable to read action");
 
         if action.trim() == "1" {
-            println!("Oopsies. Haven't done this one yet. This will be the log a run action");
+            actions::log_run();
         } else if action.trim() == "2" {
             println!("Oopsies. Haven't done this one yet. This will be the ");
         } else if action.trim() == "3" {
