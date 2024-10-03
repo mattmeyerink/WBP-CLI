@@ -76,3 +76,59 @@ pub fn get_run_time_input() -> String {
 
     return run_time;
 }
+
+pub fn get_run_description_input() -> String {
+    let mut run_description = String::new();
+
+    print!("Description of run: ");
+    io::stdout().flush().expect("Darn toilet got stuck again");
+    io::stdin().read_line(&mut run_description).expect("Unable to read description");
+
+    return run_description;
+}
+
+pub fn get_is_run_workout_input() -> String {
+    let is_run_workout;
+
+    loop {
+        let mut is_run_workout_raw = String::new();
+        print!("Was this a workout session? (Yes/No): ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        io::stdin().read_line(&mut is_run_workout_raw).expect("Unable to read date");
+
+        if is_run_workout_raw.trim().to_lowercase() == "yes" {
+            is_run_workout = String::from("true");
+            break;
+        } else if is_run_workout_raw.trim().to_lowercase() == "no" {
+            is_run_workout = String::from("false");
+            break;
+        } else {
+            println!("It's a yes or no question dingis!");
+        }
+    }
+
+    return is_run_workout;
+}
+
+pub fn get_is_run_race_input() -> String {
+    let is_run_race;
+
+    loop {
+        let mut is_run_race_raw = String::new();
+        print!("Was this a race? (Yes/No): ");
+        io::stdout().flush().expect("Darn toilet got stuck again");
+        io::stdin().read_line(&mut is_run_race_raw).expect("Unable to read date");
+
+        if is_run_race_raw.trim().to_lowercase() == "yes" {
+            is_run_race = String::from("true");
+            break;
+        } else if is_run_race_raw.trim().to_lowercase() == "no" {
+            is_run_race = String::from("false");
+            break;
+        } else {
+            println!("It's a yes or no question dingis!");
+        }
+    }
+
+    return is_run_race;
+}

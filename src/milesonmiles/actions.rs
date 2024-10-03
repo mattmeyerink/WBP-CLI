@@ -7,4 +7,7 @@ pub fn log_run() {
     let run_date = input_utils::get_run_date_input();
     let run_distance = input_utils::get_run_distance_input();
     let run_time = input_utils::get_run_time_input();
+    let is_run_workout = input_utils::get_is_run_workout_input();
+    let is_run_race = input_utils::get_is_run_race_input();
+    let run_description = input_utils::get_run_description_input();
 }
