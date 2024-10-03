@@ -2,7 +2,7 @@ use core::f64;
 use std::io::{self, Write};
 use chrono::NaiveDate;
 
-const MILES_ON_MILES_DATE_STRING_FORMAT: &str = "m/d/Y";
+const MILES_ON_MILES_DATE_STRING_FORMAT: &str = "%m/%d/%Y";
 
 pub fn get_run_date_input() -> String {
     let date;
@@ -13,7 +13,7 @@ pub fn get_run_date_input() -> String {
         io::stdout().flush().expect("Darn toilet got stuck again");
         io::stdin().read_line(&mut date_raw_string).expect("Unable to read date");
 
-        if NaiveDate::parse_from_str(MILES_ON_MILES_DATE_STRING_FORMAT, date_raw_string.as_str().trim()).is_ok() {
+        if NaiveDate::parse_from_str(date_raw_string.as_str().trim(), MILES_ON_MILES_DATE_STRING_FORMAT).is_ok() {
             date = date_raw_string;
             break;
         } else {
