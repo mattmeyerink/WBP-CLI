@@ -1,4 +1,6 @@
-use crate::milesonmiles::{data::Run, input_utils};
+use chrono::Datelike;
+
+use crate::milesonmiles::{data::Run, input_utils, utils::Utils};
 
 pub fn log_run() {
     println!("A run has been done! Many congrats!");
@@ -21,6 +23,10 @@ pub fn log_run() {
     };
 
     let filename = run.get_file_name();
+    let run_year = run.get_date_object();
+    Utils::create_weekly_run_log_file(filename, run_year.year().to_string());
+
+    // Create the directory structure and create the file if needed.
 
     // Add a confirmation step that prints out the info to be stored
 

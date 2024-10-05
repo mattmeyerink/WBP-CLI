@@ -52,6 +52,18 @@ impl Utils {
         }
     }
 
+    pub(crate) fn create_weekly_run_log_file(filename: String, year: String) {
+        let current_wbp_miles_on_miles_year_data_path = home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(&year);
+        if !current_wbp_miles_on_miles_year_data_path.exists() {
+            fs::create_dir(&current_wbp_miles_on_miles_year_data_path).expect("Unable to make current year outer dir");
+        }
+
+        let run_log_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(&year).join(filename);
+        if !run_log_file_path.exists() {
+            std::fs::File::create_new(&run_log_file_path).expect("There was an error making the needed file");
+        }
+    }
+
     pub(crate) fn get_miles_on_miles_date_string_format() -> String {
         return String::from("%m/%d/%Y");
     }
