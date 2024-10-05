@@ -13,8 +13,6 @@ pub struct Run {
 
 impl Run {
     pub(crate) fn get_file_name(&self) -> String {
-        // Determine the first monday given the date of the run.
-
         let date_object = self.get_date_object();
         
         let monday_date = Utils::get_current_week_monday_from_date(date_object);
