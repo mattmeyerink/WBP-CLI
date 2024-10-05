@@ -2,7 +2,7 @@ use core::f64;
 use std::io::{self, Write};
 use chrono::NaiveDate;
 
-const MILES_ON_MILES_DATE_STRING_FORMAT: &str = "%m/%d/%Y";
+use crate::milesonmiles::utils::Utils;
 
 pub fn get_run_date_input() -> String {
     let date;
@@ -13,7 +13,8 @@ pub fn get_run_date_input() -> String {
         io::stdout().flush().expect("Darn toilet got stuck again");
         io::stdin().read_line(&mut date_raw_string).expect("Unable to read date");
 
-        if NaiveDate::parse_from_str(date_raw_string.as_str().trim(), MILES_ON_MILES_DATE_STRING_FORMAT).is_ok() {
+        // TODO -> validate the date is not after today. Can't log a future run
+        if NaiveDate::parse_from_str(date_raw_string.as_str().trim(), &Utils::get_miles_on_miles_date_string_format().as_str()).is_ok() {
             date = date_raw_string;
             break;
         } else {
@@ -24,8 +25,8 @@ pub fn get_run_date_input() -> String {
     return date;
 }
 
-pub fn get_run_distance_input() -> String {
-    let run_distance: String;
+pub fn get_run_distance_input() -> f64 {
+    let run_distance;
 
     loop {
         let mut run_distance_raw_string = String::new();
@@ -34,7 +35,7 @@ pub fn get_run_distance_input() -> String {
         io::stdin().read_line(&mut run_distance_raw_string).expect("Unable to read date");
 
         if run_distance_raw_string.trim().parse::<f64>().is_ok() {
-            run_distance = run_distance_raw_string;
+            run_distance = run_distance_raw_string.trim().parse::<f64>().unwrap();
             break;
         } else {
             println!("Not a valid distance dude. Try again!");
@@ -45,7 +46,7 @@ pub fn get_run_distance_input() -> String {
 }
 
 pub fn get_run_time_input() -> String {
-    let run_time: String;
+    let run_time;
 
     loop {
         let mut run_time_raw_string = String::new();
@@ -87,7 +88,7 @@ pub fn get_run_description_input() -> String {
     return run_description;
 }
 
-pub fn get_is_run_workout_input() -> String {
+pub fn get_is_run_workout_input() -> bool {
     let is_run_workout;
 
     loop {
@@ -97,10 +98,10 @@ pub fn get_is_run_workout_input() -> String {
         io::stdin().read_line(&mut is_run_workout_raw).expect("Unable to read date");
 
         if is_run_workout_raw.trim().to_lowercase() == "yes" {
-            is_run_workout = String::from("true");
+            is_run_workout = true;
             break;
         } else if is_run_workout_raw.trim().to_lowercase() == "no" {
-            is_run_workout = String::from("false");
+            is_run_workout = false;
             break;
         } else {
             println!("It's a yes or no question dingis!");
@@ -110,7 +111,7 @@ pub fn get_is_run_workout_input() -> String {
     return is_run_workout;
 }
 
-pub fn get_is_run_race_input() -> String {
+pub fn get_is_run_race_input() -> bool {
     let is_run_race;
 
     loop {
@@ -120,10 +121,10 @@ pub fn get_is_run_race_input() -> String {
         io::stdin().read_line(&mut is_run_race_raw).expect("Unable to read date");
 
         if is_run_race_raw.trim().to_lowercase() == "yes" {
-            is_run_race = String::from("true");
+            is_run_race = true;
             break;
         } else if is_run_race_raw.trim().to_lowercase() == "no" {
-            is_run_race = String::from("false");
+            is_run_race = false;
             break;
         } else {
             println!("It's a yes or no question dingis!");

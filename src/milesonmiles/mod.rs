@@ -1,6 +1,7 @@
 use std::io::{self, Write};
 
 use chrono::Duration;
+use utils::Utils;
 
 mod utils;
 mod actions;
@@ -14,10 +15,10 @@ pub fn milesonmiles() {
     println!("");
     println!("");
 
-    let mut current_date = utils::get_current_week_monday();
+    let mut current_date = Utils::get_current_week_monday();
 
     loop {
-        utils::create_miles_on_miles_directory_structure(current_date);
+        Utils::create_miles_on_miles_directory_structure(current_date);
 
         // This is where we are going to print out data about the runs for this week.
 
