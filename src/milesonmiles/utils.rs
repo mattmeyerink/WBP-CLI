@@ -1,4 +1,7 @@
 use std::fs;
+use std::fs::OpenOptions;
+use std::io::Write;
+use std::path::PathBuf;
 
 use chrono::DateTime;
 use chrono::Datelike;
@@ -52,7 +55,7 @@ impl Utils {
         }
     }
 
-    pub(crate) fn create_weekly_run_log_file(filename: String, year: String) {
+    pub(crate) fn create_weekly_run_log_file(filename: &String, year: String) {
         let current_wbp_miles_on_miles_year_data_path = home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(&year);
         if !current_wbp_miles_on_miles_year_data_path.exists() {
             fs::create_dir(&current_wbp_miles_on_miles_year_data_path).expect("Unable to make current year outer dir");
@@ -66,5 +69,21 @@ impl Utils {
 
     pub(crate) fn get_miles_on_miles_date_string_format() -> String {
         return String::from("%m/%d/%Y");
+    }
+
+    pub(crate) fn write_to_file(file_path: PathBuf, line_to_write: String) {
+        let mut data_file = OpenOptions::new()
+            .append(true)
+            .open(file_path)
+            .expect("cannot open file");
+
+        // Write to a file
+        data_file
+            .write(line_to_write.as_bytes())
+            .expect("write failed");
+
+        println!("\n");
+        println!("Your run has been added! Time to party!");
+        println!("\n");
     }
 }
