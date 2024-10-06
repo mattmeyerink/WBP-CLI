@@ -1,6 +1,6 @@
 use core::f64;
 use std::io::{self, Write};
-use chrono::NaiveDate;
+use chrono::{Datelike, Local, NaiveDate};
 
 use crate::milesonmiles::utils::Utils;
 
@@ -16,13 +16,29 @@ impl InputUtils {
             io::stdout().flush().expect("Darn toilet got stuck again");
             io::stdin().read_line(&mut date_raw_string).expect("Unable to read date");
     
-            // TODO -> validate the date is not after today. Can't log a future run
-            if NaiveDate::parse_from_str(date_raw_string.as_str().trim(), &Utils::get_miles_on_miles_date_string_format().as_str()).is_ok() {
-                date = date_raw_string;
-                break;
-            } else {
+            let is_date_valid = NaiveDate::parse_from_str(date_raw_string.as_str().trim(), &Utils::get_miles_on_miles_date_string_format().as_str()).is_ok();
+
+            if !is_date_valid {
                 println!("Not a valid date dude. Try again in mm/dd/yyyy format!");
+                continue;
             }
+
+            let run_date = NaiveDate::parse_from_str(date_raw_string.as_str().trim(), &Utils::get_miles_on_miles_date_string_format().as_str()).unwrap();
+
+            if run_date.year() < 1900 {
+                println!("I don't think you were running before 1900. Lets try that again.");
+                continue;
+            }
+
+            let current_date = Local::now().date_naive();
+            let is_run_date_in_future = current_date.signed_duration_since(run_date).num_days() <= -1;
+            if is_run_date_in_future {
+                println!("LIAR! That date is in the future and couldn't have happened yet! Try again.");
+                continue;
+            }
+
+            date = String::from(date_raw_string.trim());
+            break;
         }
     
         return date;
@@ -71,7 +87,7 @@ impl InputUtils {
             }
     
             if is_run_time_valid {
-                run_time = run_time_raw_string;
+                run_time = String::from(run_time_raw_string.trim());
                 break;
             } else {
                 println!("Not a valid run time dude. Try again!");

@@ -23,6 +23,7 @@ pub fn log_run() {
             description
         };
 
+        println!("");
         println!("Does this look right?");
         println!("Date: {}", run.date);
         println!("Distance: {}", run.distance);
