@@ -1,5 +1,6 @@
 use std::io::{self, Write};
 
+use actions::Actions;
 use chrono::Duration;
 use utils::Utils;
 
@@ -35,12 +36,9 @@ pub fn milesonmiles() {
         io::stdin().read_line(&mut action).expect("Unable to read action");
 
         if action.trim() == "1" {
-            actions::log_run();
+            Actions::log_run();
         } else if action.trim() == "2" {
-            // This will contain the following features.
-            // - Race date countdown goodies.
-            // - Construct specific weeks of training with context of weeks till race
-            println!("Oopsies. Haven't done this one yet. This will be the planning training section");
+            Actions::plan_training();
         } else if action.trim() == "3" {
             // This will contain week, month, and year views with both the training and performed runs
             println!("Oopsies. Haven't done this one yet. This will be the analyze running section");
