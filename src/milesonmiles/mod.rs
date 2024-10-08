@@ -20,13 +20,10 @@ pub fn milesonmiles() {
     loop {
         Utils::create_miles_on_miles_directory_structure(current_date);
 
-        // This is where we are going to print out data about the runs for this week.
-
         println!("Actions you can take.");
         println!("[1]: Log a run.");
-        println!("[2]: View run details.");
-        println!("[3]: Next week.");
-        println!("[4]: Previous week.");
+        println!("[2]: Plan training.");
+        println!("[3]: Analyze running.");
         println!("[5]: Quit miles on miles.");
 
         println!("");
@@ -40,9 +37,13 @@ pub fn milesonmiles() {
         if action.trim() == "1" {
             actions::log_run();
         } else if action.trim() == "2" {
-            println!("Oopsies. Haven't done this one yet. This will be the ");
+            // This will contain the following features.
+            // - Race date countdown goodies.
+            // - Construct specific weeks of training with context of weeks till race
+            println!("Oopsies. Haven't done this one yet. This will be the planning training section");
         } else if action.trim() == "3" {
-            current_date = current_date - Duration::days(7);
+            // This will contain week, month, and year views with both the training and performed runs
+            println!("Oopsies. Haven't done this one yet. This will be the analyze running section");
         } else if action.trim() == "4" {
             current_date = current_date + Duration::days(7);
         } else if action.trim() == "5" {
