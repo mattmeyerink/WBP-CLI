@@ -62,7 +62,7 @@ impl Actions {
             // Print out how long until each of the races in the next 4 months.
 
             println!("Actions you can take.");
-            println!("[1]: Plan a week");
+            println!("[1]: Create plan for this week");
             println!("[2]: Add a race");
             println!("[3]: View next week's plan");
             println!("[4]: View last week's plan");
@@ -77,7 +77,7 @@ impl Actions {
             io::stdin().read_line(&mut action).expect("Unable to read action");
 
             if action.trim() == "1" {
-                println!("This will be another input loop to decide what week to plan and then to input each day");
+                println!("This will be another input loop to create a plan for the week");
             } else if action.trim() == "2" {
                 println!("This will be the option to add a race to the race file. That whole concept needs to be fleshed out");
             } else if action.trim() == "3" {

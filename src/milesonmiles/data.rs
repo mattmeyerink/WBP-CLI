@@ -30,9 +30,24 @@ impl Run {
         let run_year = self.get_date_object();
         Utils::create_weekly_run_log_file(&filename, run_year.year().to_string());
 
-        let new_run_string = format!("{}--{}--{}--{}--{}--{}--{}\n", "RUN", self.date, self.distance, self.time, self.is_workout, self.is_race, self.description);
+        let new_run_string = format!("{}--{}--{}--{}--{}--{}\n", self.date, self.distance, self.time, self.is_workout, self.is_race, self.description);
         let run_log_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(run_year.year().to_string()).join(filename);
 
         Utils::write_to_file(run_log_file_path, new_run_string);
+    }
+}
+
+pub struct WeekPlan {
+    pub(crate) date: String,
+    pub(crate) runs: Vec<Run>
+}
+
+impl WeekPlan {
+    pub(crate) fn create_week_plan() {
+        // Store the date string. This will be the first line in the file.
+        // Create a loop getting information for each day.
+        // After each day maybe output a little summary of distances/isworkout of runs added so far.
+        // Have first thing entered be a mileage total for the week. 
+        // At each input show remaining miles to do to hit the goal.
     }
 }
