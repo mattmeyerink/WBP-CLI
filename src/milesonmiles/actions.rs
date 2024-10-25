@@ -2,7 +2,7 @@ use std::io::{self, Write};
 
 use chrono::Duration;
 
-use crate::milesonmiles::{data::Run, input_utils::InputUtils, utils::Utils};
+use crate::milesonmiles::{data::{Run, WeekPlan}, input_utils::InputUtils, utils::Utils};
 
 pub struct Actions;
 
@@ -39,7 +39,7 @@ impl Actions {
             println!("Is race: {}", run.is_race);
             println!("Description: {}", run.description);
     
-            let is_input_confirmed = InputUtils::get_input_confirmation();
+            let is_input_confirmed = InputUtils::get_input_confirmation(String::from("Keep on keeping on?"));
     
             if is_input_confirmed {
                 println!("Awesome we will add it then!");
@@ -77,7 +77,7 @@ impl Actions {
             io::stdin().read_line(&mut action).expect("Unable to read action");
 
             if action.trim() == "1" {
-                println!("This will be another input loop to create a plan for the week");
+                WeekPlan::create_week_plan(current_date);
             } else if action.trim() == "2" {
                 println!("This will be the option to add a race to the race file. That whole concept needs to be fleshed out");
             } else if action.trim() == "3" {

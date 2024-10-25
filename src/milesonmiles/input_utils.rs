@@ -1,5 +1,5 @@
 use core::f64;
-use std::io::{self, Write};
+use std::{collections::HashMap, io::{self, Write}};
 use chrono::{Datelike, Local, NaiveDate};
 
 use crate::milesonmiles::utils::Utils;
@@ -153,12 +153,12 @@ impl InputUtils {
         return is_run_race;
     }
 
-    pub(crate) fn get_input_confirmation() -> bool {
+    pub(crate) fn get_input_confirmation(confirmation_message: String) -> bool {
         let is_input_confirmed;
     
         loop {
             let mut is_input_confirmed_raw = String::new();
-            print!("Keep on keeping on? (Yes/No): ");
+            print!("{} (Yes/No): ", confirmation_message);
             io::stdout().flush().expect("Darn toilet got stuck again");
             io::stdin().read_line(&mut is_input_confirmed_raw).expect("Unable to read date");
     
@@ -174,5 +174,53 @@ impl InputUtils {
         }
     
         return is_input_confirmed;
+    }
+
+    pub(crate) fn get_goal_weekly_mileage() -> f64 {
+        let goal_weekly_mileage;
+
+        loop {
+            let mut goal_weekly_mileage_raw = String::new();
+            print!("What is your mileage goal for the week: ");
+            io::stdout().flush().expect("Darn toilet got stuck again");
+            io::stdin().read_line(&mut goal_weekly_mileage_raw).expect("Unable to read mileage goal");
+
+            if goal_weekly_mileage_raw.trim().parse::<f64>().is_ok_and(|x| x > 0.0) {
+                goal_weekly_mileage = goal_weekly_mileage_raw.trim().parse::<f64>().unwrap();
+                break;
+            } else {
+                println!("Come on man! It needs to be a positive number");
+            }
+        }
+
+        return goal_weekly_mileage;
+    }
+
+    pub(crate) fn get_day_of_week() -> String {
+        let day_of_week;
+        let day_of_week_to_weekday: HashMap<String, String> = HashMap::from([
+            (String::from("monday"), String::from("0")),
+            (String::from("tuesday"), String::from("1")),
+            (String::from("wednesday"), String::from("2")),
+            (String::from("thursday"), String::from("3")),
+            (String::from("friday"), String::from("4")),
+            (String::from("saturday"), String::from("5")),
+            (String::from("sunday"), String::from("6"))
+        ]);
+        loop {
+            let mut day_of_week_string = String::new();
+            print!("Day of the week: ");
+            io::stdout().flush().expect("Darn toilet got stuck again");
+            io::stdin().read_line(&mut day_of_week_string).expect("Unable to read date");
+
+            if day_of_week_to_weekday.contains_key(day_of_week_string.trim()) {
+                day_of_week = day_of_week_to_weekday.get(day_of_week_string.trim()).unwrap().to_string();
+                break;
+            } else {
+                println!("Not a valid day of the week. Try again dude!")
+            }
+        }
+
+        return day_of_week;
     }
 }
