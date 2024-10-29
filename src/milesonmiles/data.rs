@@ -39,7 +39,7 @@ impl Run {
         let new_run_string = self.generate_run_string();
         let run_log_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(run_year.year().to_string()).join("log").join(filename);
 
-        Utils::write_to_file(run_log_file_path, new_run_string, true);
+        Utils::write_to_file(run_log_file_path, new_run_string);
     }
 }
 
@@ -130,18 +130,16 @@ impl WeekPlan {
         // Create the first line that has the date of the first monday of the plan
         let mut week_plan_file_string = format!("{}\n", self.date.clone());
 
-        // Add a line for each run in the plan
-
         for run in &self.runs {
             week_plan_file_string = format!("{}{}", week_plan_file_string, run.generate_run_string());
         }
 
         let week_plan_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(week_date_object.year().to_string()).join("plan").join(filename);
         
-        Utils::write_to_file(week_plan_file_path, week_plan_file_string, false);
+        Utils::write_to_file(week_plan_file_path, week_plan_file_string);
     }
 
     fn get_file_name(&self) -> String {
-        return format!("{}-WeekPlan.txt", self.date);
+        return format!("{}-WeekPlan.txt", self.date.replace("/", "-"));
     }
 }

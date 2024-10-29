@@ -107,9 +107,9 @@ impl Utils {
         return String::from("%m/%d/%Y");
     }
 
-    pub(crate) fn write_to_file(file_path: PathBuf, line_to_write: String, append: bool) {
+    pub(crate) fn write_to_file(file_path: PathBuf, line_to_write: String) {
         let mut data_file = OpenOptions::new()
-            .append(append)
+            .append(true)
             .open(file_path)
             .expect("cannot open file");
 
