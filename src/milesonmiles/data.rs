@@ -39,7 +39,7 @@ impl Run {
         let new_run_string = self.generate_run_string();
         let run_log_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(run_year.year().to_string()).join("log").join(filename);
 
-        Utils::write_to_file(run_log_file_path, new_run_string);
+        Utils::append_to_file(run_log_file_path, new_run_string);
     }
 }
 

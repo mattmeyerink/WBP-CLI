@@ -107,7 +107,7 @@ impl Utils {
         return String::from("%m/%d/%Y");
     }
 
-    pub(crate) fn write_to_file(file_path: PathBuf, line_to_write: String) {
+    pub(crate) fn append_to_file(file_path: PathBuf, line_to_write: String) {
         let mut data_file = OpenOptions::new()
             .append(true)
             .open(file_path)
@@ -117,9 +117,18 @@ impl Utils {
         data_file
             .write(line_to_write.as_bytes())
             .expect("write failed");
+    }
 
-        println!("\n");
-        println!("Your run has been added! Time to party!");
-        println!("\n");
+    pub(crate) fn write_to_file(file_path: PathBuf, updated_contents: String) {
+        let mut data_file = OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .open(file_path)
+            .expect("cannot open file");
+
+        // Write to a file
+        data_file
+            .write(updated_contents.as_bytes())
+            .expect("write failed");
     }
 }
