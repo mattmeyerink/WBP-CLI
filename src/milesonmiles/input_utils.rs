@@ -1,6 +1,6 @@
 use core::f64;
 use std::{collections::HashMap, io::{self, Write}};
-use chrono::{Datelike, Local, NaiveDate};
+use chrono::{Datelike, Local, NaiveDate, Weekday};
 
 use crate::milesonmiles::utils::Utils;
 
@@ -196,16 +196,16 @@ impl InputUtils {
         return goal_weekly_mileage;
     }
 
-    pub(crate) fn get_day_of_week() -> String {
+    pub(crate) fn get_day_of_week() -> Weekday {
         let day_of_week;
-        let day_of_week_to_weekday: HashMap<String, String> = HashMap::from([
-            (String::from("monday"), String::from("0")),
-            (String::from("tuesday"), String::from("1")),
-            (String::from("wednesday"), String::from("2")),
-            (String::from("thursday"), String::from("3")),
-            (String::from("friday"), String::from("4")),
-            (String::from("saturday"), String::from("5")),
-            (String::from("sunday"), String::from("6"))
+        let day_of_week_to_weekday: HashMap<String, Weekday> = HashMap::from([
+            (String::from("monday"), Weekday::Mon),
+            (String::from("tuesday"), Weekday::Tue),
+            (String::from("wednesday"), Weekday::Wed),
+            (String::from("thursday"), Weekday::Thu),
+            (String::from("friday"), Weekday::Fri),
+            (String::from("saturday"), Weekday::Sat),
+            (String::from("sunday"), Weekday::Sun)
         ]);
         loop {
             let mut day_of_week_string = String::new();
@@ -214,13 +214,13 @@ impl InputUtils {
             io::stdin().read_line(&mut day_of_week_string).expect("Unable to read date");
 
             if day_of_week_to_weekday.contains_key(day_of_week_string.trim()) {
-                day_of_week = day_of_week_to_weekday.get(day_of_week_string.trim()).unwrap().to_string();
+                day_of_week = day_of_week_to_weekday.get(day_of_week_string.trim()).unwrap();
                 break;
             } else {
                 println!("Not a valid day of the week. Try again dude!")
             }
         }
 
-        return day_of_week;
+        return *day_of_week;
     }
 }

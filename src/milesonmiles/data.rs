@@ -27,15 +27,19 @@ impl Run {
         return NaiveDate::parse_from_str(self.date.as_str().trim(), Utils::get_miles_on_miles_date_string_format().as_str()).unwrap();
     }
 
+    pub(crate) fn generate_run_string(&self) -> String {
+        return format!("{}--{}--{}--{}--{}--{}\n", self.date, self.distance, self.time, self.is_workout, self.is_race, self.description);
+    }
+
     pub(crate) fn save_run(&self) {
         let filename = self.get_file_name();
         let run_year = self.get_date_object();
         Utils::create_weekly_run_log_file(&filename, run_year.year().to_string());
 
-        let new_run_string = format!("{}--{}--{}--{}--{}--{}\n", self.date, self.distance, self.time, self.is_workout, self.is_race, self.description);
-        let run_log_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(run_year.year().to_string()).join(filename);
+        let new_run_string = self.generate_run_string();
+        let run_log_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(run_year.year().to_string()).join("log").join(filename);
 
-        Utils::write_to_file(run_log_file_path, new_run_string);
+        Utils::write_to_file(run_log_file_path, new_run_string, true);
     }
 }
 
@@ -46,18 +50,12 @@ pub struct WeekPlan {
 
 impl WeekPlan {
     pub(crate) fn create_week_plan(current_date: DateTime<Local>) {
-        // Store the date string. This will be the first line in the file.
-        // Create a loop getting information for each day.
-        // After each day maybe output a little summary of distances/isworkout of runs added so far.
-        // Have first thing entered be a mileage total for the week. 
-        // At each input show remaining miles to do to hit the goal.
-
-        let date_string = format!("{}-{}-{}", current_date.month(), current_date.day(), current_date.year());
+        let date_string = format!("{}/{}/{}", current_date.month(), current_date.day(), current_date.year());
         println!("Planning the training for week of {}", date_string);
 
         let mut runs: Vec<Run> = vec![];
         let goal_weekly_mileage = InputUtils::get_goal_weekly_mileage();
-        let current_weekly_mileage = 0.0;
+        let mut current_weekly_mileage = 0.0;
 
         println!("Lets get to planning!");
 
@@ -75,9 +73,7 @@ impl WeekPlan {
     
             loop {
                 let day_of_week = InputUtils::get_day_of_week();
-                // Get the date using the current date and the input day of the week.
-                // let date = InputUtils::get_run_date_input();
-
+                let date = Utils::get_date_string_from_weekday(current_date.clone(), day_of_week);
                 let distance = InputUtils::get_run_distance_input();
                 let is_workout = InputUtils::get_is_run_workout_input();
                 let is_race = InputUtils::get_is_run_race_input();
@@ -85,7 +81,7 @@ impl WeekPlan {
 
         
                 let run = Run {
-                    date: String::from("THIS IS A PLACEHOLDER"),
+                    date,
                     distance,
                     time: String::from("0"),
                     is_workout,
@@ -105,6 +101,7 @@ impl WeekPlan {
         
                 if is_input_confirmed {
                     runs.push(run);
+                    current_weekly_mileage += distance;
                     println!("Awesome on to the next day!");
                     break;
                 } else {
@@ -112,5 +109,39 @@ impl WeekPlan {
                 }
             }
         }
+
+        let week_plan = WeekPlan {
+            date: date_string,
+            runs
+        };
+
+        week_plan.save_week_plan();
+    }
+
+    pub(crate) fn get_date_object(&self) -> NaiveDate {
+        return NaiveDate::parse_from_str(self.date.as_str().trim(), Utils::get_miles_on_miles_date_string_format().as_str()).unwrap();
+    }
+
+    fn save_week_plan(&self) {
+        let week_date_object = self.get_date_object();
+        let filename = self.get_file_name();
+        Utils::create_week_plan_file(&filename, String::from(week_date_object.year().to_string()));
+
+        // Create the first line that has the date of the first monday of the plan
+        let mut week_plan_file_string = format!("{}\n", self.date.clone());
+
+        // Add a line for each run in the plan
+
+        for run in &self.runs {
+            week_plan_file_string = format!("{}{}", week_plan_file_string, run.generate_run_string());
+        }
+
+        let week_plan_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(week_date_object.year().to_string()).join("plan").join(filename);
+        
+        Utils::write_to_file(week_plan_file_path, week_plan_file_string, false);
+    }
+
+    fn get_file_name(&self) -> String {
+        return format!("{}-WeekPlan.txt", self.date);
     }
 }
