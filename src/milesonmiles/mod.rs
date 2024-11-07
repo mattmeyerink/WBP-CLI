@@ -11,9 +11,8 @@ mod display;
 mod input_utils;
 
 pub fn milesonmiles() {
-    println!("Welcome to Miles on Miles!");
-
     println!("");
+    println!("Welcome to Miles on Miles!");
     println!("");
 
     let mut current_date = Utils::get_current_week_monday();

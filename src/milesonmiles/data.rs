@@ -51,12 +51,16 @@ pub struct WeekPlan {
 impl WeekPlan {
     pub(crate) fn create_week_plan(current_date: DateTime<Local>) {
         let date_string = format!("{}/{}/{}", current_date.month(), current_date.day(), current_date.year());
+
+        println!("");
         println!("Planning the training for week of {}", date_string);
+        println!("");
 
         let mut runs: Vec<Run> = vec![];
         let goal_weekly_mileage = InputUtils::get_goal_weekly_mileage();
         let mut current_weekly_mileage = 0.0;
 
+        println!("");
         println!("Lets get to planning!");
 
         loop {
@@ -64,9 +68,14 @@ impl WeekPlan {
 
             // This is the loop to gather runs until the user says the plan is complete
             let remaining_miles_to_plan = goal_weekly_mileage - current_weekly_mileage;
+
+            println!("");
             println!("You have {} miles left to plan", remaining_miles_to_plan);
+            println!("");
 
             let add_another_run = InputUtils::get_input_confirmation(String::from("Do you want to add another run?"));
+            println!("");
+
             if !add_another_run {
                 break;
             }
@@ -91,13 +100,14 @@ impl WeekPlan {
         
                 println!("");
                 println!("Does this look right?");
+                println!("");
                 println!("Date: {}", run.date);
                 println!("Distance: {}", run.distance);
                 println!("Is workout: {}", run.is_workout);
                 println!("Is race: {}", run.is_race);
                 println!("Description: {}", run.description);
         
-                let is_input_confirmed = InputUtils::get_input_confirmation(String::from("Keep on keeping on?"));
+                let is_input_confirmed = InputUtils::get_input_confirmation(String::from("Does this run look good?"));
         
                 if is_input_confirmed {
                     runs.push(run);

@@ -53,7 +53,9 @@ impl Actions {
     }
 
     pub(crate) fn plan_training() {
+        println!("");
         println!("Planning here we go!");
+        println!("");
 
         let mut current_date = Utils::get_current_week_monday();
 
