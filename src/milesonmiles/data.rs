@@ -1,4 +1,6 @@
-use chrono::{DateTime, Datelike, Local, NaiveDate};
+use std::collections::HashMap;
+
+use chrono::{DateTime, Datelike, Local, NaiveDate, Weekday};
 use dirs::home_dir;
 
 use crate::milesonmiles::input_utils::InputUtils;
@@ -151,5 +153,75 @@ impl WeekPlan {
 
     fn get_file_name(&self) -> String {
         return format!("{}-WeekPlan.txt", self.date.replace("/", "-"));
+    }
+
+    fn print_week_plan(&self) {
+        let weekday_iterable = vec![
+            Weekday::Mon,
+            Weekday::Tue,
+            Weekday::Wed,
+            Weekday::Thu,
+            Weekday::Fri,
+            Weekday::Sat,
+            Weekday::Sun
+        ];
+
+        let mut runs_by_week_day: HashMap<Weekday, Vec<&Run>> = HashMap::from([
+            (Weekday::Mon, vec![]),
+            (Weekday::Tue, vec![]),
+            (Weekday::Wed, vec![]),
+            (Weekday::Thu, vec![]),
+            (Weekday::Fri, vec![]),
+            (Weekday::Sat, vec![]),
+            (Weekday::Sun, vec![])
+        ]);
+
+        let weekday_to_display_text: HashMap<Weekday, String> = HashMap::from([
+            (Weekday::Mon, String::from("Monday")),
+            (Weekday::Tue, String::from("Tuesday")),
+            (Weekday::Wed, String::from("Wednesday")),
+            (Weekday::Thu, String::from("Thursday")),
+            (Weekday::Fri, String::from("Friday")),
+            (Weekday::Sat, String::from("Saturday")),
+            (Weekday::Sun, String::from("Sunday"))
+        ]);
+
+        for run in &self.runs {
+            let run_date_object = run.get_date_object();
+
+            runs_by_week_day.get_mut(&run_date_object.weekday()).unwrap().push(run);
+        }
+
+        for weekday in weekday_iterable {
+            let weekday_runs = runs_by_week_day.get(&weekday).unwrap();
+
+            let mut weekday_run_strings: Vec<String> = vec![];
+            for run in weekday_runs {
+
+                let descriptor;
+                if run.is_race {
+                    descriptor = "R";
+                } else if run.is_workout {
+                    descriptor = "W";
+                } else {
+                    descriptor = "";
+                }
+
+                let run_string = format!("{} {}", run.distance, descriptor);
+                weekday_run_strings.push(run_string);
+            }
+
+            let weekday_runs_formatted;
+            if weekday_run_strings.len() == 0 {
+                weekday_runs_formatted = String::from("REST DAY");
+            } else {
+                weekday_runs_formatted = weekday_run_strings.join(",");
+            }
+
+            let weekday_string = weekday_to_display_text.get(&weekday).unwrap();
+
+            println!("{}: {}", weekday_string, weekday_runs_formatted);
+        }
+
     }
 }
