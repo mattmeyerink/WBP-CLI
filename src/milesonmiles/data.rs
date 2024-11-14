@@ -52,13 +52,15 @@ pub struct WeekPlan {
 
 impl WeekPlan {
     pub(crate) fn create_week_plan(current_date: DateTime<Local>) {
-        let date_string = format!("{}/{}/{}", current_date.month(), current_date.day(), current_date.year());
+        let mut week_plan = WeekPlan {
+            date: format!("{}/{}/{}", current_date.month(), current_date.day(), current_date.year()),
+            runs: vec![]
+        };
 
         println!("");
-        println!("Planning the training for week of {}", date_string);
+        println!("Planning the training for week of {}", week_plan.date);
         println!("");
-
-        let mut runs: Vec<Run> = vec![];
+        
         let goal_weekly_mileage = InputUtils::get_goal_weekly_mileage();
         let mut current_weekly_mileage = 0.0;
 
@@ -66,13 +68,13 @@ impl WeekPlan {
         println!("Lets get to planning!");
 
         loop {
-            // Print out the current state of the week plan.
-
-            // This is the loop to gather runs until the user says the plan is complete
             let remaining_miles_to_plan = goal_weekly_mileage - current_weekly_mileage;
 
             println!("");
             println!("You have {} miles left to plan", remaining_miles_to_plan);
+            println!("");
+
+            week_plan.print_week_plan();
             println!("");
 
             let add_another_run = InputUtils::get_input_confirmation(String::from("Do you want to add another run?"));
@@ -112,7 +114,7 @@ impl WeekPlan {
                 let is_input_confirmed = InputUtils::get_input_confirmation(String::from("Does this run look good?"));
         
                 if is_input_confirmed {
-                    runs.push(run);
+                    week_plan.runs.push(run);
                     current_weekly_mileage += distance;
                     println!("Awesome on to the next day!");
                     break;
@@ -121,11 +123,6 @@ impl WeekPlan {
                 }
             }
         }
-
-        let week_plan = WeekPlan {
-            date: date_string,
-            runs
-        };
 
         week_plan.save_week_plan();
     }
