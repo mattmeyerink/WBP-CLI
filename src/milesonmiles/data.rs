@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt::format, path::PathBuf};
 
 use chrono::{DateTime, Datelike, Local, NaiveDate, Weekday};
 use dirs::home_dir;
@@ -42,6 +42,34 @@ impl Run {
         let run_log_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(run_year.year().to_string()).join("log").join(filename);
 
         Utils::append_to_file(run_log_file_path, new_run_string);
+    }
+
+    pub(crate) fn read_run_from_string(run_string: &str) -> Run {
+        let run_parts: Vec<&str> = run_string.split("--").collect();
+
+        if run_parts.len() < 6 {
+            let empty_run = Run {
+                date: String::new(),
+                distance: 0.0,
+                time: String::new(),
+                is_workout: false,
+                is_race: false,
+                description: String::new()
+            };
+
+            return empty_run;
+        }
+
+        let run = Run {
+            date: String::from(run_parts[0]),
+            distance: run_parts[1].trim().parse::<f64>().unwrap(),
+            time: String::from(run_parts[2]),
+            is_workout: run_parts[3] == "true",
+            is_race: run_parts[4] == "true",
+            description: String::from(run_parts[5])
+        };
+
+        return run;
     }
 }
 
@@ -127,6 +155,29 @@ impl WeekPlan {
         week_plan.save_week_plan();
     }
 
+    pub(crate) fn read_week_plan(current_date: DateTime<Local>) -> WeekPlan{
+        let mut week_plan = WeekPlan {
+            date: format!("{}/{}/{}", current_date.month(), current_date.day(), current_date.year()),
+            runs: vec![]
+        };
+
+        let file_path = week_plan.get_week_plan_file_path();
+        let week_plan_file_contents = Utils::read_from_file(file_path);
+
+        for line in week_plan_file_contents.lines() {
+            let run = Run::read_run_from_string(line);
+
+            // The line wasn't a valid run if we couldn't pull a date off of it
+            if run.date.len() == 0 {
+                continue;
+            }
+
+            week_plan.runs.push(run);
+        }
+
+        return week_plan;
+    }
+
     pub(crate) fn get_date_object(&self) -> NaiveDate {
         return NaiveDate::parse_from_str(self.date.as_str().trim(), Utils::get_miles_on_miles_date_string_format().as_str()).unwrap();
     }
@@ -143,7 +194,7 @@ impl WeekPlan {
             week_plan_file_string = format!("{}{}", week_plan_file_string, run.generate_run_string());
         }
 
-        let week_plan_file_path = home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(week_date_object.year().to_string()).join("plan").join(filename);
+        let week_plan_file_path = self.get_week_plan_file_path();
         
         Utils::write_to_file(week_plan_file_path, week_plan_file_string);
     }
@@ -151,6 +202,12 @@ impl WeekPlan {
     fn get_file_name(&self) -> String {
         return format!("{}-WeekPlan.txt", self.date.replace("/", "-"));
     }
+
+    fn get_week_plan_file_path(&self) -> PathBuf {
+        let file_name = self.get_file_name();
+        let week_date_object = self.get_date_object();
+        return home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(week_date_object.year().to_string()).join("plan").join(file_name);
+    }   
 
     fn print_week_plan(&self) {
         let weekday_iterable = vec![

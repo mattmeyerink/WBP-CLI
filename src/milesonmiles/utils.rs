@@ -131,4 +131,15 @@ impl Utils {
             .write(updated_contents.as_bytes())
             .expect("write failed");
     }
+
+    pub(crate) fn read_from_file(file_path: PathBuf) -> String {
+        // Attempt to pull the text file that has this weeks notes
+        if !file_path.exists() {
+            std::fs::File::create_new(&file_path).expect("There was an error making the needed file");
+        }
+
+        let contents = fs::read_to_string(file_path).expect("Should have been able to read the file");
+
+        return contents;
+    }
 }
