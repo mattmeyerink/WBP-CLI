@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fmt::format, path::PathBuf};
+use std::{collections::HashMap, path::PathBuf};
 
 use chrono::{DateTime, Datelike, Local, NaiveDate, Weekday};
 use dirs::home_dir;
@@ -209,7 +209,16 @@ impl WeekPlan {
         return home_dir().unwrap().join("Documents").join("wbp-data").join("miles-on-miles").join(week_date_object.year().to_string()).join("plan").join(file_name);
     }   
 
-    fn print_week_plan(&self) {
+    fn calculate_total_weekly_mileage(&self) -> f64 {
+        let mut total_mileage = 0.0;
+        for run in &self.runs {
+            total_mileage += run.distance;
+        }
+
+        return total_mileage;
+    }
+
+    pub(crate) fn print_week_plan(&self) {
         let weekday_iterable = vec![
             Weekday::Mon,
             Weekday::Tue,
@@ -276,6 +285,8 @@ impl WeekPlan {
 
             println!("{}: {}", weekday_string, weekday_runs_formatted);
         }
-
+        
+        let total_weekly_mileage = &self.calculate_total_weekly_mileage();
+        println!("Total: {}", total_weekly_mileage);
     }
 }

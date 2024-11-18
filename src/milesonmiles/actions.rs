@@ -60,8 +60,12 @@ impl Actions {
         let mut current_date = Utils::get_current_week_monday();
 
         loop {
-            // Print out the training plan for the current week.
-            // Print out how long until each of the races in the next 4 months.
+            let current_week_plan = WeekPlan::read_week_plan(current_date);
+            println!("Week of {}", current_week_plan.date);
+            current_week_plan.print_week_plan();
+            println!("");
+
+            // TODO: Print out how long until each of the races in the next 4 months.
 
             println!("Actions you can take.");
             println!("[1]: Create plan for this week");
