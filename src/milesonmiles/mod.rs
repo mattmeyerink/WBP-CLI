@@ -47,7 +47,7 @@ pub fn milesonmiles() {
             // Wondering if this should just be replaced with a straight up call to strava.
             // Need to come back to this but it seems I really just want to have access to
             // the data. Don't necessarily want to make myself double enter it if I don't need to.
-            Actions::log_run();
+            println!("Ooopsies. Haven't quite figured out what this will be yet. Come back in a later version.");
         } else if action.trim() == "2" {
             WeekPlan::create_week_plan(current_date);
         } else if action.trim() == "3" {
