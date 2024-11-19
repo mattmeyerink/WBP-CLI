@@ -287,6 +287,7 @@ impl WeekPlan {
         }
         
         let total_weekly_mileage = &self.calculate_total_weekly_mileage();
+        println!("--------------------");
         println!("Total: {}", total_weekly_mileage);
     }
 }

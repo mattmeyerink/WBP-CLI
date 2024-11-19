@@ -1,8 +1,4 @@
-use std::io::{self, Write};
-
-use chrono::Duration;
-
-use crate::milesonmiles::{data::{Run, WeekPlan}, input_utils::InputUtils, utils::Utils};
+use crate::milesonmiles::{data::Run, input_utils::InputUtils};
 
 pub struct Actions;
 
@@ -50,53 +46,5 @@ impl Actions {
         }
     
         run.save_run();
-    }
-
-    pub(crate) fn plan_training() {
-        println!("");
-        println!("Planning here we go!");
-        println!("");
-
-        let mut current_date = Utils::get_current_week_monday();
-
-        loop {
-            let current_week_plan = WeekPlan::read_week_plan(current_date);
-            println!("Week of {}", current_week_plan.date);
-            current_week_plan.print_week_plan();
-            println!("");
-
-            // TODO: Print out how long until each of the races in the next 4 months.
-
-            println!("Actions you can take.");
-            println!("[1]: Create plan for this week");
-            println!("[2]: Add a race");
-            println!("[3]: View next week's plan");
-            println!("[4]: View last week's plan");
-            println!("[5]: Return to main menu");
-
-            println!("");
-
-            print!("Which action do you want to take: ");
-            io::stdout().flush().expect("Darn toilet got stuck again");
-
-            let mut action = String::new();
-            io::stdin().read_line(&mut action).expect("Unable to read action");
-
-            if action.trim() == "1" {
-                WeekPlan::create_week_plan(current_date);
-            } else if action.trim() == "2" {
-                println!("This will be the option to add a race to the race file. That whole concept needs to be fleshed out");
-            } else if action.trim() == "3" {
-                current_date = current_date + Duration::days(1);
-            } else if action.trim() == "4" {
-                current_date = current_date - Duration::days(1);
-            } else if action.trim() == "5" {
-                break;
-            } else {
-                println!("\n");
-                println!("Boooo thats not a correct action");
-                println!("\n");
-            }
-        }
     }
 }
