@@ -9,7 +9,7 @@ mod actions;
 
 pub fn month_view() {
     loop {
-        print!("Which view do you want to take? (Highlight/List) or quit to exit: ");
+        print!("Which view do you want to take? (Highlight/List) or quit: ");
         io::stdout().flush().expect("Darn toilet got stuck again");
 
         let mut type_of_month_view = String::new();

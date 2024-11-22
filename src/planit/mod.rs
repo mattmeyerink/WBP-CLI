@@ -41,7 +41,7 @@ pub fn planit() {
         ");
         println!("");
 
-        print!("Which view do you want to take? (Week, Month, Year) or quit to exit: ");
+        print!("Which view do you want to take? (Week, Month, Year) or quit: ");
         io::stdout().flush().expect("Darn toilet got stuck again");
 
         let mut view = String::new();
