@@ -1,12 +1,10 @@
 use std::io::{self, Write};
 
-use actions::Actions;
 use chrono::Duration;
-use data::WeekPlan;
+use data::{Run, WeekPlan};
 use utils::Utils;
 
 mod utils;
-mod actions;
 mod data;
 mod input_utils;
 
@@ -44,10 +42,7 @@ pub fn milesonmiles() {
         io::stdin().read_line(&mut action).expect("Unable to read action");
 
         if action.trim() == "1" {
-            // Wondering if this should just be replaced with a straight up call to strava.
-            // Need to come back to this but it seems I really just want to have access to
-            // the data. Don't necessarily want to make myself double enter it if I don't need to.
-            println!("Ooopsies. Haven't quite figured out what this will be yet. Come back in a later version.");
+            Run::log_run();
         } else if action.trim() == "2" {
             WeekPlan::create_week_plan(current_date);
         } else if action.trim() == "3" {
